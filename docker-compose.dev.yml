@@ -1,0 +1,41 @@
+services:
+  elysian-spirit-bot-dev:
+    image: elysian-spirit-bot-development:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: elysian-spirit-bot-development
+    environment:
+      - DATABASE_HOST=db-dev
+      - NODE_ENV=development
+    env_file:
+      - .env.development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db-dev
+    networks:
+      - elysian-dev-network
+
+  db-dev:
+    image: postgres:latest
+    container_name: elysian-spirit-db-development
+    restart: always
+    env_file:
+      - .env.development
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    ports:
+      - "5555:5432"
+    networks:
+      - elysian-dev-network
+
+volumes:
+  pgdata_dev:
+
+networks:
+  elysian-dev-network:
+    name: elysian-dev-network
+
+

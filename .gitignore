@@ -1,0 +1,39 @@
+# IDE-specific files
+.idea/
+.vscode/
+
+# Node.js modules
+node_modules/
+
+# Typescript build artifacts
+*.tsbuildinfo
+
+# Environment files
+.env.development
+.env.production
+
+# More secrets
+config.json
+
+# Logs
+logs/
+!logs/.gitkeep
+
+# Google credentials
+google_credentials/
+!google_credentials/.gitkeep
+
+# Build output
+dist/
+
+# Prisma generated client
+src/generated/
+
+# DB backups
+db_backups/
+
+# WIP
+wip/
+
+# Thank you Apple...
+.DS_Store

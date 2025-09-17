@@ -1,0 +1,19 @@
+FROM node:lts
+
+RUN apt-get update && \
+    apt-get install  postgresql-client -y && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install --include=dev
+
+ENV NODE_ENV=development
+
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+
+CMD ["npm", "run", "dev"]

@@ -1,0 +1,57 @@
+services:
+  elysian-spirit-bot-prod:
+    image: elysian-spirit-bot-production:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: elysian-spirit-bot-production
+    environment:
+      - DATABASE_HOST=db-prod
+      - NODE_ENV=production
+    env_file:
+      - .env.production
+    volumes:
+      - /app/node_modules
+      - ./config.json:/app/config.json:ro
+      - ./google_credentials:/app/google_credentials:ro
+      - ./logs:/app/logs
+    depends_on:
+      - db-prod
+    networks:
+      - elysian-prod-network
+
+  db-prod:
+    image: postgres:latest
+    container_name: elysian-spirit-db-production
+    restart: always
+    env_file:
+      - .env.production
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    ports:
+      - "6666:5432"
+    networks:
+      - elysian-prod-network
+
+  db-backup:
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    env_file:
+      - .env.production
+    environment:
+      - POSTGRES_HOST=elysian-spirit-db-production
+      - SCHEDULE=@daily
+    volumes:
+      - ./db_backups:/backups
+    depends_on:
+      - db-prod
+    networks:
+      - elysian-prod-network
+
+volumes:
+  pgdata_prod:
+
+networks:
+  elysian-prod-network:
+    name: elysian-prod-network
+

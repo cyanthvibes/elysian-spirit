@@ -1,0 +1,44 @@
+# IDE-specific files
+.idea/
+.vscode/
+
+# Node.js modules
+node_modules/
+
+# TypeScript build artifacts
+dist/
+*.tsbuildinfo
+
+# Environment files
+.env.development
+.env.test
+
+# Logs
+logs/
+
+# Development files
+*.md
+LICENSE
+logo.png
+
+# Git
+.git/
+.gitignore
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Examples
+.env.example
+example_config.json
+
+# DB backups
+db_backups/
+
+# WIP
+wip/
+
+# Thank you Apple...
+.DS_Store

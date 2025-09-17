@@ -1,0 +1,2 @@
+export const CHARACTER_LIMIT = 4000;
+export const MAX_COMPONENTS_PER_MESSAGE = 40;

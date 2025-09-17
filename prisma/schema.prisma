@@ -1,0 +1,92 @@
+generator client {
+  provider      = "prisma-client"
+  output        = "../src/generated/prisma"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x", "darwin-arm64"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ActionType {
+  ADD
+  REMOVE
+  DAILY
+  TEMPLE
+  UNDO
+  AUDIT
+  HISTORY
+}
+
+model Guild {
+  guildID             String        @id
+  commandsEnabled     Boolean       @default(false)
+
+  members           Member[]
+  transactions    ClanPointTransaction[]
+  actions         ClanPointAction[]
+}
+
+model Member {
+  id                        String                    @id @default(cuid())
+  discordID                 String
+
+  guild                     Guild                     @relation(fields: [guildID], references: [guildID])
+  guildID                   String
+  @@unique([discordID, guildID])
+
+  balance                   Int                       @default(0)
+  clanPointsLastClaimedAt   DateTime?
+  lastMessageSentAt         DateTime?
+
+  performedTransactions     ClanPointTransaction[]    @relation("PerformedBy")
+  performedActions          ClanPointAction[]         @relation("PerformedByMember")
+  receivedActions           ClanPointAction[]         @relation("TargetMember")
+
+  undoTransactions          ClanPointTransaction[]    @relation("UndoneBy")
+}
+
+model ClanPointTransaction {
+  id                String                    @id @default(cuid())
+  actionType        ActionType
+  reason            String
+  createdAt         DateTime                  @default(now())
+  performedBy       Member                    @relation("PerformedBy", fields: [performedByID], references: [id])
+  performedByID     String
+
+  guild             Guild                     @relation(fields: [guildID], references: [guildID])
+  guildID           String
+
+  actions           ClanPointAction[]
+
+  undone            Boolean                   @default(false)
+  undoneAt          DateTime?
+  undoneBy          Member?                   @relation("UndoneBy", fields: [undoneByID], references: [id])
+  undoneByID        String?
+
+  undoOf            ClanPointTransaction?     @relation("UndoOf", fields: [undoOfID], references: [id])
+  undoOfID          String?                   @unique
+  undoneByThis      ClanPointTransaction?     @relation("UndoOf")
+}
+
+model ClanPointAction {
+  id                String                    @id @default(cuid())
+
+  targetMember      Member                    @relation("TargetMember", fields: [targetMemberID], references: [id])
+  targetMemberID    String
+
+  guild             Guild                     @relation(fields: [guildID], references: [guildID])
+  guildID           String
+
+  actionType        ActionType
+  amount            Int
+  reason            String
+  previousBalance   Int?
+
+  transaction       ClanPointTransaction      @relation(fields: [transactionID], references: [id])
+  transactionID     String
+
+  performedBy       Member                    @relation("PerformedByMember", fields: [performedByID], references: [id])
+  performedByID     String
+}

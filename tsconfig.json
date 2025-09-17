@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleDetection": "force",
+    "allowJs": true,
+
+    "moduleResolution": "NodeNext",
+
+    "strict": true,
+    "skipLibCheck": true,
+
+    "forceConsistentCasingInFileNames": true,
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    "paths": {
+      "classes/*": ["./src/classes/*"],
+      "loaders/*": ["./src/loaders/*"],
+      "utils/*": ["./src/utils/*"],
+      "constants/*": ["./src/constants/*"],
+      "scripts/*": ["./src/scripts/*"],
+      "config/*": ["./src/config/*"],
+      "database/*": ["./src/database/*"],
+      "services/*": ["./src/services/*"],
+      "types/*": ["./src/types/*"],
+
+
+      "src/*": ["./src/*"],
+      "root/*": ["./*"]
+    }
+  },
+  "include": ["src/**/*"],
+}

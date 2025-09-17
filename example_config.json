@@ -1,0 +1,27 @@
+{
+  "GUILDS": {
+    "[GUILD_ID_HERE]": {
+      "CHANNEL_IDS": {
+        "BOT_CHANNEL": "",
+        "OSRS_CLAN_CHAT_CHANNEL": ""
+      },
+      "ROLE_IDS": {
+        "GUEST": "",
+        "MEMBER_PERMS": "",
+        "CLAN_STAFF": ""
+      },
+      "SPREADSHEET_ID": "",
+      "SPREADSHEET_COLUMNS": {
+        "RSN": "",
+        "ALTS": "",
+        "DISCORD_ID": ""
+      },
+      "SPREADSHEET_ROWS": {
+        "END_ROW": "",
+        "START_ROW": ""
+      },
+      "SPREADSHEET_SHEET": "",
+      "PREFIX": "!"
+    }
+  }
+}
