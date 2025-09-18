@@ -2,6 +2,7 @@
 // assuming a .csv-file exists with columns Discord ID and Balance
 
 // Usage: importMembers.js <guildID> <path/to/csv>
+// Or: ts-node importMembers.ts <guildID> <path/to/csv>
 
 import { createId } from "@paralleldrive/cuid2";
 import { parse } from "csv-parse/sync";
@@ -30,7 +31,7 @@ async function main(): Promise<void> {
   const csv: string = fs.readFileSync(csvPath, "utf-8");
   const records: unknown[] = parse(csv, {
     columns: true,
-    delimiter: ";",
+    delimiter: ",",
     skip_empty_lines: true,
   });
 
