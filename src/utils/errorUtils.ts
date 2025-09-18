@@ -51,88 +51,44 @@ export async function handleInteractionError(
   try {
     // For ephemeral errors
     if (err instanceof EphemeralError) {
-      // Defer if possible
       if (!interaction.deferred && !interaction.replied) {
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
       }
 
-      // If the interaction has not been replied to but is deferred, edit reply
-      if (!interaction.replied) {
-        // Send error
-        await interaction.editReply({
-          allowedMentions: { parse: [] },
-          components: createSimpleContainers(ContainerStyle.ERROR, err.message),
-          flags: MessageFlags.IsComponentsV2,
-        });
-
-        // Otherwise, edit reply
-      } else if (interaction.replied) {
-        // Send error
-        await interaction.reply({
-          allowedMentions: { parse: [] },
-          components: createSimpleContainers(ContainerStyle.ERROR, err.message),
-          flags: MessageFlags.IsComponentsV2,
-        });
-      }
+      await interaction.editReply({
+        allowedMentions: { parse: [] },
+        components: createSimpleContainers(ContainerStyle.ERROR, err.message),
+        flags: MessageFlags.IsComponentsV2,
+      });
 
       // For public errors
     } else if (err instanceof PublicError) {
-      // Defer if possible
       if (!interaction.deferred && !interaction.replied) {
         await interaction.deferReply();
       }
 
-      // If the interaction has not been replied to but is deferred, edit reply
-      if (!interaction.replied) {
-        // Send error
-        await interaction.reply({
-          allowedMentions: { parse: [] },
-          components: createSimpleContainers(ContainerStyle.ERROR, err.message),
-          flags: MessageFlags.IsComponentsV2,
-        });
+      await interaction.editReply({
+        allowedMentions: { parse: [] },
+        components: createSimpleContainers(ContainerStyle.ERROR, err.message),
+        flags: MessageFlags.IsComponentsV2,
+      });
 
-        // Otherwise, edit reply
-      } else if (interaction.replied) {
-        // Send error
-        await interaction.editReply({
-          allowedMentions: { parse: [] },
-          components: createSimpleContainers(ContainerStyle.ERROR, err.message),
-          flags: MessageFlags.IsComponentsV2,
-        });
-      }
-    } else {
       // For all other errors
+    } else {
       logger.error(ERROR_MESSAGES.unexpectedError(err));
 
-      // Defer if possible
       if (!interaction.deferred && !interaction.replied) {
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
       }
 
-      // If the interaction has not been replied to but is deferred, edit reply
-      if (!interaction.replied) {
-        // Send error
-        await interaction.reply({
-          allowedMentions: { parse: [] },
-          components: createSimpleContainers(
-            ContainerStyle.ERROR,
-            ERROR_MESSAGES.SOMETHING_WENT_WRONG,
-          ),
-          flags: MessageFlags.IsComponentsV2,
-        });
-
-        // Otherwise, edit reply
-      } else if (interaction.replied) {
-        // Send error
-        await interaction.editReply({
-          allowedMentions: { parse: [] },
-          components: createSimpleContainers(
-            ContainerStyle.ERROR,
-            ERROR_MESSAGES.SOMETHING_WENT_WRONG,
-          ),
-          flags: MessageFlags.IsComponentsV2,
-        });
-      }
+      await interaction.editReply({
+        allowedMentions: { parse: [] },
+        components: createSimpleContainers(
+          ContainerStyle.ERROR,
+          ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+        ),
+        flags: MessageFlags.IsComponentsV2,
+      });
     }
   } catch (err) {
     logger.error(ERROR_MESSAGES.unexpectedInteractionError(err));
