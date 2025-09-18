@@ -35,6 +35,7 @@ services:
 
   db-backup:
     image: prodrigestivill/postgres-backup-local
+    container_name: elysian-spirit-db-production-backup
     restart: always
     env_file:
       - .env.production
