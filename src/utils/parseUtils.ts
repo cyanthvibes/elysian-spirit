@@ -63,13 +63,17 @@ export async function parseMemberMentions(
 
   if (memberIDs.length === 0) return [];
 
-  const uniqueMemberIDs: string[] = [...new Set(memberIDs)];
-
   try {
     // Get all members from a guild
-    const members: Collection<string, GuildMember> = await guild.members.fetch({
-      user: uniqueMemberIDs,
-    });
+    const members = new Collection<string, GuildMember>(
+      memberIDs
+        .map((id: string): (GuildMember | string)[] | null => {
+          const member: GuildMember | undefined = guild.members.cache.get(id);
+
+          return member ? [id, member] : null;
+        })
+        .filter(Boolean) as [string, GuildMember][],
+    );
 
     // Filter out bots
     const humanMembersSet = new Set(

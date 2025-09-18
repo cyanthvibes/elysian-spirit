@@ -39,16 +39,22 @@ export async function ensureMembers(
       (id: string): boolean => !existingIDs.has(id),
     );
 
-    let humanIDs: string[] = [];
-
     // If there are members missing from the database
     if (missingIDs.length) {
       // Only fetch missing members from Discord (bots are filtered out)
-      const members: Collection<string, GuildMember> =
-        await guild.members.fetch({ user: missingIDs });
-      humanIDs = members
-        .filter((member: GuildMember): boolean => !member.user.bot)
-        .map((member: GuildMember): string => member.user.id);
+      const members = new Collection<string, GuildMember>(
+        missingIDs
+          .map((id: string): (GuildMember | string)[] | null => {
+            const member: GuildMember | undefined = guild.members.cache.get(id);
+
+            return member && !member.user.bot ? [id, member] : null;
+          })
+          .filter(Boolean) as [string, GuildMember][],
+      );
+
+      const humanIDs: string[] = members.map(
+        (member: GuildMember): string => member.user.id,
+      );
 
       // If there are non-bot members
       if (humanIDs.length) {

@@ -8,6 +8,8 @@ export interface Presence {
   url?: string;
 }
 
+export const FETCHING_TIMEOUT = 300000; // 5-minute timeout
+
 export const PRESENCE_INTERVAL_MS: number = 10 * 1000; // 10 seconds
 
 export const PRESENCES: Presence[] = [

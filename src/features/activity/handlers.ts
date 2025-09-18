@@ -56,9 +56,10 @@ export async function handleInactivityInteraction(
   }
 
   // Get all the members from the guild
-  const members: Collection<string, GuildMember> = (
-    await interaction.guild.members.fetch()
-  ).filter((member: GuildMember): boolean => !member.user.bot);
+  const members: Collection<string, GuildMember> =
+    interaction.guild.members.cache.filter(
+      (member: GuildMember): boolean => !member.user.bot,
+    );
 
   const discordIDs: string[] = members.map(
     (member: GuildMember): string => member.id,
@@ -96,7 +97,7 @@ export async function handleInactivityInteraction(
       days,
     );
 
-    await sendInteractionContainers(interaction, containers, false);
+    await sendInteractionContainers(interaction, containers, true);
   } else if (subcommand === "de-rank") {
     let membersToDeRank: string[] = inactiveMemberIDs;
 
@@ -129,6 +130,6 @@ export async function handleInactivityInteraction(
       days,
     );
 
-    await sendInteractionContainers(interaction, containers, false);
+    await sendInteractionContainers(interaction, containers, true);
   }
 }

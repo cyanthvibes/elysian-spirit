@@ -19,9 +19,15 @@ export async function filterMembersWithRole(
 
   try {
     // Get all members from the guild
-    const members: Collection<string, GuildMember> = await guild.members.fetch({
-      user: uniqueMemberIDs,
-    });
+    const members = new Collection<string, GuildMember>(
+      uniqueMemberIDs
+        .map((id: string): (GuildMember | string)[] | null => {
+          const member: GuildMember | undefined = guild.members.cache.get(id);
+
+          return member ? [id, member] : null;
+        })
+        .filter(Boolean) as [string, GuildMember][],
+    );
 
     // Get the role ID for the required role for this guild
     const requiredRoleID: string = getRoleID(guild.id, requiredRole);

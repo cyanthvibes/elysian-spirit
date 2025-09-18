@@ -6,6 +6,7 @@ import {
   validateGoogleCredentials,
 } from "config/googleCredentialsUtils.js";
 import { ELYSIAN_SPIRIT_CLIENT_MESSAGES } from "constants/messages/elysianSpiritClientMessages.js";
+import { FETCHING_TIMEOUT } from "constants/ready.js";
 import { getAllGuilds } from "database/repositories/guilds/guildRepository.js";
 import { Events } from "discord.js";
 import { Guild } from "src/generated/prisma/client.js";
@@ -67,6 +68,32 @@ export default class ClientReadyEvent extends Event<Events.ClientReady> {
         guild.guildID,
         guild.commandsEnabled,
       );
+    }
+
+    // Fetch all members to fill the cache
+    for (const [guildID, guild] of client.guilds.cache) {
+      try {
+        logger.info(
+          ELYSIAN_SPIRIT_CLIENT_MESSAGES.fetchingGuildMembers(
+            guild.name,
+            guildID,
+          ),
+        );
+
+        await guild.members.fetch({ time: FETCHING_TIMEOUT });
+
+        logger.info(
+          ELYSIAN_SPIRIT_CLIENT_MESSAGES.fetchedMembers(guild.name, guildID),
+        );
+      } catch (err) {
+        logger.error(
+          ELYSIAN_SPIRIT_CLIENT_MESSAGES.errorFetchingMembers(
+            guild.name,
+            guildID,
+            err,
+          ),
+        );
+      }
     }
   }
 }

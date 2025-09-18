@@ -14,5 +14,14 @@ export const ELYSIAN_SPIRIT_CLIENT_MESSAGES = {
     ${err}`;
   },
 
+  errorFetchingMembers: (name: string, guildID: string, err: unknown): string =>
+    `${EMOJIS.ERROR} Failed to fetch all members for guild ${name} ${guildID}:\n${err}`,
+
+  fetchedMembers: (name: string, guildID: string): string =>
+    `${EMOJIS.SUCCESS} Fetched all members for guild ${name} ${guildID}`,
+
+  fetchingGuildMembers: (name: string, guildID: string): string =>
+    `${EMOJIS.CHECKING} Fetching all members for guild ${name} ${guildID}`,
+
   SUCCESSFUL_LOGIN: `${EMOJIS.SUCCESS} Bot successfully logged in`,
 } as const;
