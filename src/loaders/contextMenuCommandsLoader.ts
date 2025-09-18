@@ -3,18 +3,9 @@ import { ContextMenuCommand } from "classes/contextMenuCommand.js";
 import { Collection } from "discord.js";
 import { glob } from "glob";
 import { LoaderConfig, loadModulesFromFiles } from "loaders/moduleLoader.js";
+import { getLoaderEnv } from "utils/loaderUtils.js";
 
-const useTs: boolean = process.env.FORCE_TS === "true";
-const baseDir: string = useTs
-  ? "src"
-  : process.env.NODE_ENV === "production"
-    ? "dist"
-    : "src";
-const ext: string = useTs
-  ? "ts"
-  : process.env.NODE_ENV === "production"
-    ? "js"
-    : "ts";
+const { baseDir, ext } = getLoaderEnv();
 
 const files: string[] = glob.sync(
   `${baseDir}/features/**/contextMenuCommand.${ext}`,

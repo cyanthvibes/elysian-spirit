@@ -5,6 +5,7 @@ import {
   LoaderConfig,
   loadModulesFromFiles,
 } from "loaders/moduleLoader.js";
+import { getLoaderEnv } from "utils/loaderUtils.js";
 
 interface Event extends Loadable {
   execute(client: ElysianSpirit, ...args: unknown[]): void;
@@ -12,17 +13,7 @@ interface Event extends Loadable {
   once?: boolean;
 }
 
-const useTs: boolean = process.env.FORCE_TS === "true";
-const baseDir: string = useTs
-  ? "src"
-  : process.env.NODE_ENV === "production"
-    ? "dist"
-    : "src";
-const ext: string = useTs
-  ? "ts"
-  : process.env.NODE_ENV === "production"
-    ? "js"
-    : "ts";
+const { baseDir, ext } = getLoaderEnv();
 
 const files: string[] = glob.sync(`${baseDir}/events/**/*.${ext}`);
 

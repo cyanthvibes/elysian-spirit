@@ -3,6 +3,7 @@ import { Collection } from "discord.js";
 import path from "node:path";
 import { ZodValidationResult } from "types/zodValidation.js";
 import { pathToFileURL } from "url";
+import { getLoaderEnv } from "utils/loaderUtils.js";
 import { logger } from "utils/logger.js";
 import { $ZodIssue } from "zod/v4/core";
 
@@ -29,26 +30,24 @@ export async function loadModulesFromFiles<T extends Loadable>(
   const modules = new Collection<string, T>();
 
   // File extensions depending on environment
-  const extension: string =
-    process.env.FORCE_TS === "true"
-      ? ".ts"
-      : process.env.NODE_ENV === "production"
-        ? ".js"
-        : ".ts";
+  const { baseDir, ext } = getLoaderEnv();
 
-  const FEATURE_FOLDER_TO_IGNORE: string[] = ["src/features/submit"];
+  // Folders to ignore (for example, WIP features)
+  const FEATURE_FOLDER_TO_IGNORE: string[] = [`${baseDir}/features/submit`];
 
   const filesToProcess: string[] = (config.files || []).filter(
     (file: string): boolean => {
       const normalisedFile: string = path.normalize(file);
 
-      // Ignore if the file is inside any ignored folder
       return (
-        file.endsWith(extension) &&
+        file.endsWith(ext) &&
         !FEATURE_FOLDER_TO_IGNORE.some((folder: string): boolean => {
-          const normalisedFolder: string = path.normalize(folder + path.sep);
+          const normalisedFolder: string = path.normalize(folder);
 
-          return normalisedFile.includes(normalisedFolder);
+          return (
+            normalisedFile === normalisedFolder ||
+            normalisedFile.startsWith(normalisedFolder + path.sep)
+          );
         })
       );
     },
