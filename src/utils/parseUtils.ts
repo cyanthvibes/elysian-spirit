@@ -1,8 +1,8 @@
 import { Collection, Guild, GuildMember } from "discord.js";
-import { ParsedDiscordName } from "src/features/spreadsheet/types.js";
+import emojiRegex from "emoji-regex";
+const EMOJI_REGEX: RegExp = emojiRegex();
 
-const EMOJI_REGEX =
-  /[\u{1F3FB}-\u{1FAFF}\u{1F300}-\u{1F6FF}\u{2600}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{1F900}-\u{1F9FF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{2300}-\u{23FF}\u{2B00}-\u{2BFF}\u{3030}\u{303D}\u{3297}\u{3299}]|<a?:\w+:\d+>/gu;
+import { ParsedDiscordName } from "src/features/spreadsheet/types.js";
 
 const SPECIAL_CHARS_REGEX = /[.,:;!?"'`~@#$%^&*()[\]{}<>|\\/]/g;
 
@@ -10,12 +10,12 @@ const SPECIAL_CHARS_REGEX = /[.,:;!?"'`~@#$%^&*()[\]{}<>|\\/]/g;
 export function normaliseName(name: string): string {
   return (
     name
-      // Remove spaces at the beginning and end
-      .trim()
       // Remove emojis
       .replace(EMOJI_REGEX, "")
       // Remove special characters
       .replace(SPECIAL_CHARS_REGEX, "")
+      // Remove spaces at the beginning and end
+      .trim()
       // Convert to lowercase
       .toLowerCase()
   );
