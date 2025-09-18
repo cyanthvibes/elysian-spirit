@@ -24,6 +24,7 @@ export default class EnableOrDisableCommands extends MessageCommand {
         );
 
         await setCommandsEnabled(message.guild.id, true);
+        client.guildCommandsEnabledStateCache.set(message.guild.id, true);
 
         await sentMessage.edit(ENABLE_OR_DISABLE_MESSAGE.resultMessage(true));
       } else if (action === "disable") {
@@ -32,6 +33,7 @@ export default class EnableOrDisableCommands extends MessageCommand {
         );
 
         await setCommandsEnabled(message.guild.id, false);
+        client.guildCommandsEnabledStateCache.set(message.guild.id, false);
 
         await sentMessage.edit(ENABLE_OR_DISABLE_MESSAGE.resultMessage(false));
       } else {
