@@ -21,9 +21,9 @@ export const HELP_MESSAGES = {
     typeLabels: string,
   ): string => {
     if (entry.isMention) {
-      return `- ${bold(entry.mention)} ${typeLabels ? ` ${typeLabels}` : ""}: ${entry.description}`;
+      return `- ${bold(entry.mention)}${typeLabels ? ` ${typeLabels}` : ""}: ${entry.description}`;
     } else {
-      return `- ${bold(`/${entry.name}`)} ${typeLabels ? ` ${typeLabels}` : ""}: ${entry.description}`;
+      return `- ${bold(`/${entry.name}`)}${typeLabels ? ` ${typeLabels}` : ""}: ${entry.description}`;
     }
   },
 
@@ -34,7 +34,7 @@ export const HELP_MESSAGES = {
   ): string =>
     `- ${bold(name)}: ${description} ${required ? `${italic("(required)")}` : `${italic("(optional)")}`}`,
 
-  FOOTER_IF_SHOWING_ALL_COMMANDS: `${subtext(`Use ${inlineCode("/help <command>")} or ${inlineCode("/help <command>")} for detailed info about a specific command.`)}`,
+  FOOTER_IF_SHOWING_ALL_COMMANDS: `${subtext(`Use ${inlineCode("/help <command>")} for detailed info about a specific command.`)}`,
 
   formatSpecificCommandHeader: (
     entry: AccessibleHelpEntry,
