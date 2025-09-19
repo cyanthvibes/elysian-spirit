@@ -2,7 +2,7 @@ import { DAILY_CLAN_POINTS } from "constants/clanPoints.js";
 import { modifyClanPoints } from "database/repositories/clanPoints/actionRepository.js";
 import { ensureMembers } from "database/repositories/members/memberRepository.js";
 import { ChatInputCommandInteraction, MessageFlags } from "discord.js";
-import { DateTime } from "luxon";
+import { DateTime, Duration } from "luxon";
 import { DAILY_MESSAGES } from "src/features/daily/messages.js";
 import {
   canClaimDailyPoints,
@@ -11,6 +11,7 @@ import {
 import { ActionType } from "src/generated/prisma/enums.js";
 import { ContainerStyle } from "types/container.js";
 import { createSimpleContainers } from "utils/containers/containersBuilder.js";
+import { pluralise } from "utils/formatUtils.js";
 
 // Function that handles /daily
 export async function handleDailyInteraction(
@@ -48,16 +49,32 @@ export async function handleDailyInteraction(
       now,
     );
 
-    const timestamp: number = Math.floor(nextEligible.toSeconds());
-
-    const hoursUntilNextClaim: number = Math.ceil(
-      nextEligible.diff(now.setZone("Europe/London"), "hours").hours,
+    const diff: Duration<boolean> = nextEligible.diff(
+      now.setZone("Europe/London"),
+      ["hours", "minutes"],
     );
+
+    const hours: number = Math.floor(diff.hours);
+    const minutes: number = Math.round(diff.minutes);
+
+    let timeUntilNextClaim: string;
+
+    if (hours === 0 && minutes == 0) {
+      timeUntilNextClaim = "less than a minute";
+    } else if (hours > 0 && minutes > 0) {
+      timeUntilNextClaim = `${hours} ${pluralise(hours, "hour")} and ${minutes} ${pluralise(minutes, "minute")}`;
+    } else if (hours > 0) {
+      timeUntilNextClaim = `${hours} ${pluralise(hours, "hour")}`;
+    } else {
+      timeUntilNextClaim = `${minutes} ${pluralise(minutes, "minute")}`;
+    }
+
+    const timestamp: number = Math.floor(nextEligible.toSeconds());
 
     await interaction.editReply({
       components: createSimpleContainers(
         ContainerStyle.ERROR,
-        DAILY_MESSAGES.error(hoursUntilNextClaim, timestamp),
+        DAILY_MESSAGES.error(timeUntilNextClaim, timestamp),
       ),
       flags: MessageFlags.IsComponentsV2,
     });
