@@ -1,6 +1,8 @@
 #!/bin/sh
 
-npm install --include=dev
+#if [ "$NODE_ENV" = "development" ]; then
+#  npm install --include=dev
+#fi
 
 echo "Waiting for PostgreSQL..."
 
@@ -11,14 +13,8 @@ done
 
 echo "PostgreSQL is ready, running Prisma..."
 
-# Generate Prisma client
-npx prisma generate
-
-if [ "$NODE_ENV" = "production" ]; then
-  echo "Running production migration..."
-  npx prisma migrate deploy
-else
-  echo "Running development schema sync..."
+if [ "$NODE_ENV" = "development" ]; then
+  echo "Running development schema sync"
   npx prisma db push
 fi
 

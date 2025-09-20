@@ -1,9 +1,6 @@
 services:
   elysian-spirit-bot-prod:
-    image: elysian-spirit-bot-production:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${IMAGE:-ghcr.io/cyanthvibes/elysian-spirit-bot-production:latest}
     container_name: elysian-spirit-bot-production
     environment:
       - DATABASE_HOST=db-prod
@@ -11,7 +8,6 @@ services:
     env_file:
       - .env.production
     volumes:
-      - /app/node_modules
       - ./config.json:/app/config.json:ro
       - ./google_credentials:/app/google_credentials:ro
       - ./logs:/app/logs

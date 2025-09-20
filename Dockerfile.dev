@@ -1,15 +1,18 @@
-FROM node:lts
-
-RUN apt-get update && \
-    apt-get install  postgresql-client -y && \
-    rm -rf /var/lib/apt/lists/*
+FROM node:alpine
 
 WORKDIR /app
 
+RUN apk update && apk add --no-cache postgresql17-client
+
 COPY package.json package-lock.json ./
-RUN npm install --include=dev
+
+RUN npm ci
 
 ENV NODE_ENV=development
+
+COPY prisma/schema.prisma prisma/schema.prisma
+
+RUN npx prisma generate
 
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh

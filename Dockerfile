@@ -1,33 +1,22 @@
-FROM node:lts AS build-runner
+FROM node:alpine
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm install
+RUN apk update && apk add --no-cache postgresql17-client
 
-COPY . .
+COPY package.json package-lock.json ./
+
+RUN npm ci
 
 ENV NODE_ENV=production
+
+COPY prisma/schema.prisma prisma/schema.prisma
+
+COPY . .
 
 RUN npx prisma generate
 
 RUN npm run build:full
-
-FROM node:lts AS prod-runner
-
-RUN apt-get update && \
-    apt-get install postgresql-client -y && \
-    rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-
-COPY --from=build-runner /app/package*.json ./
-
-RUN npm install --omit=dev
-
-COPY --from=build-runner /app/dist ./dist
-COPY --from=build-runner /app/prisma ./prisma
-COPY --from=build-runner /app/.env.production .env.production
 
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh

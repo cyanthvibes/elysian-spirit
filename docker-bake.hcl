@@ -16,7 +16,7 @@ target "elysian-spirit-bot-dev" {
 target "elysian-spirit-bot-prod" {
   context = "."
   dockerfile = "Dockerfile"
-  tags = ["elysian-spirit-bot-production:latest"]
+  tags = ["elysian-spirit-bot-production:local"]
   output = ["type=docker"]
 }
 

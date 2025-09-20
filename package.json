@@ -22,13 +22,7 @@
     "clear-guild-dev": "NODE_ENV=development tsx src/scripts/registerToDiscord.ts guild clear",
     "clear-global-dev": "NODE_ENV=development tsx src/scripts/registerToDiscord.ts global clear",
     "clear-guild-prod": "FORCE_TS=true NODE_ENV=production tsx src/scripts/registerToDiscord.ts guild clear",
-    "clear-global-prod": "FORCE_TS=true NODE_ENV=production tsx src/scripts/registerToDiscord.ts global clear",
-    "docker:dev": "make dev",
-    "docker:dev:up": "make dev-up",
-    "docker:dev:down": "make dev-down",
-    "docker:prod": "make prod",
-    "docker:prod:up": "make prod-up",
-    "docker:prod:down": "make prod-down"
+    "clear-global-prod": "FORCE_TS=true NODE_ENV=production tsx src/scripts/registerToDiscord.ts global clear"
   },
   "dependencies": {
     "@eslint/js": "^9.35.0",

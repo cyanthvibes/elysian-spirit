@@ -5,10 +5,10 @@
 <p>
 <strong><i>
 Discord bot for the Old School RuneScape (OSRS) Elysium clan.<br> 
-Manage clan points manually, track member activity, reward clan points based on TempleOSRS competitions, and more.
+Manage clan points, track member activity, reward clan points based on TempleOSRS competitions, and more.
 </i></strong>
 
-Need more information? Any questions? Feel free to DM me on Discord: [@cyanthvibes](https://discordapp.com/users/187286355435454466/)
+Need help? DM [@cyanthvibes](https://discordapp.com/users/187286355435454466/) on Discord: 
 </p>
 </div>
 
@@ -35,17 +35,17 @@ To-do:
 
 ## Pre-requisites
 
-You can develop or run the bot using either Docker (recommended) or your local environment.
+You can use Elysian Spirit with either Docker (recommended) or by running it locally with Node.js and PostgreSQL.
 
 ### Option A: Docker (recommended)
 
 - [Docker](https://www.docker.com)
 - [Buildx](https://github.com/docker/buildx)
-- [Node.js 23](https://nodejs.org/en) or newer (to register commands)
+- [Node.js 23](https://nodejs.org/en)+ (to register commands)
 
 ### Option B: local
 
-- [Node.js 23](https://nodejs.org/en) or newer
+- [Node.js 23](https://nodejs.org/en)+
 - [PostgreSQL](https://www.postgresql.org)
 
 ---
@@ -60,13 +60,16 @@ cd elysian-spirit
 
 ### 2. Create environment files
 
-Create `.env.development` and/or `.env.production` based on `.env.example`
+Create `.env.development` and/or `.env.production` based on the template `.env.example`.
+
+To deploy this project independently, change the `IMAGE` variable to use your own images.
+Make sure to also set your repository secrets accordingly.
 
 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications/) and create an application
 2. Under the **Bot** section, create a bot to obtain your `BOT_ID` and `BOT_TOKEN`
 3. Enable all privileged gateway intents
 
-### 3. Development server setup
+### 3. Development Discord server setup
 
 1. Create a test server on Discord
 2. Enable **Developer Mode** in your Discord client (Settings > Advanced)
@@ -82,7 +85,8 @@ Create `config.json` based on `example_config.json`.
 
 You'll need to add configuration for every Discord server the bot will serve.
 
-`OSRS_CLAN_CHAT_CHANNEL` and `END_ROW` are optional.
+`OSRS_CLAN_CHAT_CHANNEL` and `END_ROW` are optional. The `OSRS_CLAN_CHAT_CHANNEL` is the ID of the Discord text channel
+where in-game clan chat is sent to using webhooks and the [Clan Chat Webhook](https://github.com/pascalla/clan-chat-webhook) Runelite plugin.
 
 ### 5. Google credentials
 
@@ -106,69 +110,17 @@ Use the OAuth2 URL Generator in the Developer Portal (`bot` scope), or use:
 
 Bot owners can always use every command, everywhere.
 
-By default, commands are disabled for every guild the bot is in. You can enable or disable them by using this command in the chat:
+By default, commands are disabled for every guild the bot is in. 
+You can enable or disable them by using this command in the chat:
 `[prefix]commands enable|disable`
 
 If commands are disabled, staff can still use commands where `isPrivileged = true`.
 
 ---
 
-## Development
+## Registering commands
 
-### Registering slash commands
-
-Slash commands must be registered to Discord before they appear. 
-
-This can be done globally (about once an hour, otherwise rate-limited), or for your test guild.
-
-For development:
-```bash
-# Install dependencies
-npm install
-
-# register commands (guild or global)
-npm run register-guild-dev
-npm run register-global-dev
-
-# clear commands
-npm run clear-guild-dev
-npm run clear-global-dev
-```
-
-### Using docker (recommended)
-
-```bash
-make dev          # Build & run dev containers with Docker Bake and Compose
-make dev-up       # Start dev containers
-make dev-down     # Stop dev containers
-```
-
-- Automatically runs Prisma migrations and generates the Prisma client
-- Starts the bot in development mode and using `tsx watch` for hot-reloading
-
-
-### Running locally (without Docker)
-
-Ensure PostgreSQL is installed and running.
-
-```bash
-# Install dependencies (only once or when package.json changes)
-npm install
-
-npx prisma migrate deploy
-npx prisma generate
-
-# Start the bot in development mode
-npm run dev
-```
-
----
-
-## Production
-
-### Registering slash commands
-
-Slash commands must be registered to Discord before they appear.
+Slash commands and context-menu commands must be registered to Discord before they appear.
 
 This can be done globally (about once an hour, otherwise rate-limited), or for your test guild.
 
@@ -181,39 +133,84 @@ npm install
 npm run register-guild-prod
 npm run register-global-prod
 
-# clear commands
+# clear commands (guild or global)
 npm run clear-guild-prod
 npm run clear-global-prod
 ```
 
-### Using docker (recommended)
+---
+
+## Workflow with Docker (recommended)
+
+### Development
+
+- Work on a separate git branch
+- First run these commands:
+    ```bash
+    make dev                                # Start the development container (hot-reload, mounts source, uses development DB)
+    make dev-migrate name=your_migration    # Create and apply a new migration if you changed the Prisma schema
+    ```
+- Register commands for your Discord server if new ones are created
+- Migration files should be committed to version control.
+- Commit and push, then create a PR
+
+Once changes are pushed to or merged with the main branch, GitHub will automatically build the production image.
+
+### Production image testing
+
+To test the prebuilt image, run:
 
 ```bash
-make prod         # Build & run production containers
-make prod-up      # Start production containers
-make prod-down    # Stop production containers
+make prod-local
 ```
 
-- Automatically runs Prisma migrations and generates the Prisma client
-- Starts the bot in production mode
+This pulls the image from GHCR, runs migrations, and starts the stack using `.env.development` and the development DB.
 
-### Running locally (without Docker)
+### Production deployment
+
+```bash
+make prod-pull            # Pull the latest prebuilt image
+make prod-migrate         # Run migrations once, and then after every Prisma schema change
+make prod-up              # Start the production containers
+make prod-down            # Stop the production containers
+```
+
+Remember to register commands globally if new ones are created.
+
+---
+
+## Workflow without Docker
 
 Ensure PostgreSQL is installed and running.
 
+### Development
+
 ```bash
-# Install dependencies (only once or when package.json changes)
-npm install 
-
-npx prisma migrate deploy
-npx prisma generate
-
-# Build the production bundle
-npm run build:full
-
-# Start the bot
-npm run prod
+npm install                                       # Install dependencies
+npx prisma migrate dev --name your_migration      # Run migrations once, and then after every Prisma schema change
+npx prisma generate                               # Generate the Prisma client
+npm run dev                                       # Start the bot 
 ```
+
+- Register commands for your Discord server if new ones are created
+- Migration files should be committed to version control
+- Commit and push, then create a PR
+
+### Testing for production
+
+```bash
+npm install --omit=dev          # Install dependencies
+npx prisma migrate deploy       # Run migrations once, and then after every Prisma schema change
+npx prisma generate             # Generate the Prisma client 
+npm run build:full              # Build the production bundle
+npm run prod                    # Start the production container
+```
+
+Register commands for your Discord server if new ones are created.
+
+### Production deployment
+
+This is not recommended at all. The steps are the same as the ones above, but with `.env.production` and a production database.
 
 ---
 
@@ -226,7 +223,8 @@ npm run prod
 5. Commit your changes and push your branch (check out: [gitmoji](https://gitmoji.dev))
 6. Open a pull request describing your changes
 
-Please follow the existing code style and conventions. If you have any questions or want to discuss a feature, open an issue or start a discussion.
+Please follow the existing code style and conventions. If you have any questions or want to discuss a feature, 
+open an issue or start a discussion.
 
 Feel free to DM me on Discord: [@cyanthvibes](https://discordapp.com/users/187286355435454466/)
 

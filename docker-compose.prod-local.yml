@@ -1,0 +1,39 @@
+services:
+  elysian-spirit-bot-prod-local:
+    image: ${IMAGE:-ghcr.io/cyanthvibes/elysian-spirit-bot-production:latest}
+    container_name: elysian-spirit-bot-production-local
+    environment:
+      - DATABASE_HOST=db-prod-local
+      - DATABASE_URL=postgresql://user:pass@db-prod-local:5432/elysian-spirit
+      - NODE_ENV=production
+    env_file:
+      - .env.development
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./google_credentials:/app/google_credentials:ro
+      - ./logs:/app/logs
+    depends_on:
+      - db-prod-local
+    networks:
+      - elysian-prod-local-network
+
+  db-prod-local:
+    image: postgres:latest
+    container_name: elysian-spirit-db-production-local
+    restart: always
+    env_file:
+      - .env.development
+    volumes:
+      - pgdata_prod-local:/var/lib/postgresql/data
+    ports:
+      - "7777:5432"
+    networks:
+      - elysian-prod-local-network
+
+volumes:
+  pgdata_prod-local:
+
+networks:
+  elysian-prod-local-network:
+    name: elysian-prod-local-network
+

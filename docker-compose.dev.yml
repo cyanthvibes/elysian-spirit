@@ -1,6 +1,6 @@
 services:
   elysian-spirit-bot-dev:
-    image: elysian-spirit-bot-development:latest
+    image: ${IMAGE:-ghcr.io/cyanthvibes/elysian-spirit-bot-production:latest}
     build:
       context: .
       dockerfile: Dockerfile.dev
