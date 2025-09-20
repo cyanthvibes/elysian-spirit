@@ -16,6 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Write .env.production
+        run: echo "${{ secrets.ENV_PRODUCTION }}" > .env.production
+
       - name: Generate Prisma Client
         run: npx prisma generate
 
