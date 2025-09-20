@@ -106,69 +106,17 @@ Use the OAuth2 URL Generator in the Developer Portal (`bot` scope), or use:
 
 Bot owners can always use every command, everywhere.
 
-By default, commands are disabled for every guild the bot is in. You can enable or disable them by using this command in the chat:
+By default, commands are disabled for every guild the bot is in. 
+You can enable or disable them by using this command in the chat:
 `[prefix]commands enable|disable`
 
 If commands are disabled, staff can still use commands where `isPrivileged = true`.
 
 ---
 
-## Development
+## Registering commands
 
-### Registering slash commands
-
-Slash commands must be registered to Discord before they appear. 
-
-This can be done globally (about once an hour, otherwise rate-limited), or for your test guild.
-
-For development:
-```bash
-# Install dependencies
-npm install
-
-# register commands (guild or global)
-npm run register-guild-dev
-npm run register-global-dev
-
-# clear commands
-npm run clear-guild-dev
-npm run clear-global-dev
-```
-
-### Using docker (recommended)
-
-```bash
-make dev          # Build & run dev containers with Docker Bake and Compose
-make dev-up       # Start dev containers
-make dev-down     # Stop dev containers
-```
-
-- Automatically runs Prisma migrations and generates the Prisma client
-- Starts the bot in development mode and using `tsx watch` for hot-reloading
-
-
-### Running locally (without Docker)
-
-Ensure PostgreSQL is installed and running.
-
-```bash
-# Install dependencies (only once or when package.json changes)
-npm install
-
-npx prisma migrate deploy
-npx prisma generate
-
-# Start the bot in development mode
-npm run dev
-```
-
----
-
-## Production
-
-### Registering slash commands
-
-Slash commands must be registered to Discord before they appear.
+Slash commands and context-menu commands must be registered to Discord before they appear.
 
 This can be done globally (about once an hour, otherwise rate-limited), or for your test guild.
 
@@ -181,39 +129,99 @@ npm install
 npm run register-guild-prod
 npm run register-global-prod
 
-# clear commands
+# clear commands (guild or global)
 npm run clear-guild-prod
 npm run clear-global-prod
 ```
 
+---
+
+## Development workflow
+
 ### Using docker (recommended)
 
 ```bash
-make prod         # Build & run production containers
-make prod-up      # Start production containers
-make prod-down    # Stop production containers
+make dev                          # Start dev containers
+make dev-migrate name=feature     # Create and apply a new migration after schema changes
 ```
 
-- Automatically runs Prisma migrations and generates the Prisma client
-- Starts the bot in production mode
+- Installs all dependencies
+- Waits for the database to be ready
+- Runs `npx prisma generate` to generate the Prisma client
+- Runs `npx prisma db push` to quickly sync the schema to the development database (this does NOT create migration files)
+- Use `make dev-migrate name=your_migration` to create and apply migration files after schema changes
+- Starts the bot in development mode and using `tsx watch` for hot-reloading
 
 ### Running locally (without Docker)
 
 Ensure PostgreSQL is installed and running.
 
 ```bash
-# Install dependencies (only once or when package.json changes)
-npm install 
-
-npx prisma migrate deploy
-npx prisma generate
-
-# Build the production bundle
-npm run build:full
-
-# Start the bot
-npm run prod
+npm install                                     # Install dependencies (only once or when package.json changes)
+npx prisma migrate dev --name your_migration    # Create and apply a new migration after schema changes
+npx prisma generate                             # Generate the Prisma client 
+npm run dev                                     # Start the bot in development mode
 ```
+
+Use `npx prisma db push` for quick schema syncs, 
+but always use `npx prisma migrate dev` to create migration files for production changes. 
+Migration files should be committed to version control.
+
+---
+
+## Production workflow
+
+### Using docker (recommended)
+
+```bash
+make prod-pull        # Pull the latest prebuilt production image from GHCR
+make prod-migrate     # Run database migrations (once after schema changes)
+make prod-up          # Start production containers
+make prod-down        # Stop production containers
+```
+
+Migrations are not run automatically. You must run `make prod-migrate` manually before starting the bot.
+
+- The bot image is prebuilt and pulled from the registry
+- The Prisma client is generated at container setup
+
+### Running locally (without Docker)
+
+This should only be used for local production; in real deployments, use the prebuilt Docker image and manual migration step as above.
+Ensure PostgreSQL is installed and running.
+
+```bash
+npm install --omit=dev      # Install dependencies (only once or when package.json changes)
+npx prisma migrate deploy   # Run database migrations (once after schema changes)
+npx prisma generate         # Generate the Prisma client 
+npm run build:full          # Build the production bundle
+npm run prod                # Start the bot
+```
+
+---
+
+## Database migrations: development vs. production
+
+### Development
+
+After making changes to the Prisma schema, create a new migration file:
+
+```bash
+make dev-migrate name=descriptive_migration_name
+```
+
+This generates a new migration file and applies it to the development database. This file should be committed to version control.
+`npx prisma db push` updates the development database schema but does NOT create migration files.
+Migration files are required for production deployments.
+
+### Production
+
+Never use `npx prisma db push` in production. To apply schema changes in production:
+
+1. Make sure all migration files are committed and pushed
+2. On the production server, run `make prod-migrate`
+
+This applies all pending migrations to the production database.
 
 ---
 
@@ -226,7 +234,8 @@ npm run prod
 5. Commit your changes and push your branch (check out: [gitmoji](https://gitmoji.dev))
 6. Open a pull request describing your changes
 
-Please follow the existing code style and conventions. If you have any questions or want to discuss a feature, open an issue or start a discussion.
+Please follow the existing code style and conventions. If you have any questions or want to discuss a feature, 
+open an issue or start a discussion.
 
 Feel free to DM me on Discord: [@cyanthvibes](https://discordapp.com/users/187286355435454466/)
 
