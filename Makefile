@@ -8,9 +8,7 @@ dev-migrate:
 
 # Production
 prod-pull:
-	-include .env.production
-	export
-	docker pull $(IMAGE)
+	export $$(cat .env.production | xargs) && docker pull $${IMAGE}
 
 prod-migrate:
 	docker compose -f docker-compose.prod.yml run --rm elysian-spirit-bot-prod npx prisma migrate deploy
@@ -23,8 +21,6 @@ prod-down:
 
 # Testing production locally
 prod-local:
-	-include .env.development
-	export
-	docker pull $(IMAGE)
-	docker compose -f docker-compose.prod-local.yml run --rm elysian-spirit-bot-prod-local npx prisma migrate deploy
-	docker compose -f docker-compose.prod-local.yml up
+	export $$(cat .env.development | xargs) && docker pull $${IMAGE}
+	export $$(cat .env.development | xargs) && docker compose -f docker-compose.prod-local.yml run --rm elysian-spirit-bot-prod-local npx prisma migrate deploy
+	export $$(cat .env.development | xargs) && docker compose -f docker-compose.prod-local.yml up
