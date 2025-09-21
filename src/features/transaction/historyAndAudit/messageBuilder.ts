@@ -94,25 +94,33 @@ export function buildTransactionHistoryOrAuditContainers(
         (action: TransactionAction): string => {
           const { amount, previousBalance, targetMember } = action;
 
-          const newBalance: number = calculateNewBalance(
-            actionType,
-            previousBalance ?? 0,
-            amount,
-          );
+          let newBalance: number;
+          let amountPrefix: string;
 
-          const amountPrefix: string =
-            actionType === ActionType.ADD ||
-            actionType === ActionType.TEMPLE ||
-            actionType === ActionType.DAILY
-              ? "+"
-              : "-";
+          if (actionType === ActionType.UNDO) {
+            newBalance = (previousBalance ?? 0) + amount;
+            amountPrefix = amount >= 0 ? "+" : "-";
+          } else {
+            newBalance = calculateNewBalance(
+              actionType,
+              previousBalance ?? 0,
+              amount,
+            );
+
+            amountPrefix =
+              actionType === ActionType.ADD ||
+              actionType === ActionType.TEMPLE ||
+              actionType === ActionType.DAILY
+                ? "+"
+                : "-";
+          }
 
           return TRANSACTION_MESSAGES.actionLine(
             targetMember.discordID,
             previousBalance,
             newBalance,
             amountPrefix,
-            amount,
+            Math.abs(amount),
           );
         },
       );
