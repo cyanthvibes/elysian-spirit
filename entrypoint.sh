@@ -1,9 +1,5 @@
 #!/bin/sh
 
-#if [ "$NODE_ENV" = "development" ]; then
-#  npm install --include=dev
-#fi
-
 echo "Waiting for PostgreSQL..."
 
 # Wait until PostgreSQL is ready
