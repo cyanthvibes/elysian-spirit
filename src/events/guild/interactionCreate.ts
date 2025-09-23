@@ -83,7 +83,7 @@ export default class InteractionCreateEvent extends Event<Events.InteractionCrea
 
       // If the interaction was a context-menu command
       if (interaction.isContextMenuCommand()) {
-        // Get the context-menu command form the client collection
+        // Get the context-menu command from the client collection
         const contextMenuCommand: ContextMenuCommand | undefined =
           client.contextMenuCommands.get(interaction.commandName);
 
