@@ -111,7 +111,7 @@ export default class TransactionsSlashCommand extends SlashCommand {
                 option
                   .setName("limit")
                   .setDescription(
-                    `The maximum number of transactions to show (defaults to ${DEFAULT_TRANSACTION_LIMIT} days)`,
+                    `The maximum number of transactions to show (defaults to ${DEFAULT_TRANSACTION_LIMIT} transactions)`,
                   )
                   .setMinValue(1)
                   .setMaxValue(MAX_TRANSACTION_LIMIT),
