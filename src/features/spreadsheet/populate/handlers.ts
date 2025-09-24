@@ -96,5 +96,5 @@ export async function handlePopulateSpreadsheetInteraction(
   const containers: ContainerBuilder[] =
     buildPopulateSpreadsheetContainers(summary);
 
-  await sendInteractionContainers(interaction, containers, false);
+  await sendInteractionContainers(interaction, containers, true);
 }

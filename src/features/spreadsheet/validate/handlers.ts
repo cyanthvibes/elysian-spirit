@@ -50,5 +50,5 @@ export async function handleValidateSpreadsheetInteraction(
     rows.length,
   );
 
-  await sendInteractionContainers(interaction, containers, false);
+  await sendInteractionContainers(interaction, containers, true);
 }
