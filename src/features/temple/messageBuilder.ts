@@ -33,9 +33,12 @@ export function buildTempleResultsContainers(
 
   // Results block for awarded members
   if (result.awarded.length > 0) {
-    const resultLines: string[] = result.awarded.map(
-      (awarded: TempleAwardedMember): string => {
+    const resultBlocks: string[] = [];
+
+    result.awarded.forEach(
+      (awarded: TempleAwardedMember, idx: number): void => {
         const memberMention = `${userMention(awarded.discordID)}`;
+
         const placementsLine: string = TEMPLE_MESSAGES.placementLine(
           awarded.placements,
         );
@@ -54,9 +57,13 @@ export function buildTempleResultsContainers(
           finalBalance,
         );
 
-        return [memberMention, placementsLine, gainLine]
+        const block: string = [memberMention, placementsLine, gainLine]
           .filter(Boolean)
           .join("\n");
+
+        resultBlocks.push(
+          block + (idx < result.awarded.length - 1 ? "\n" : ""),
+        );
       },
     );
 
@@ -64,7 +71,7 @@ export function buildTempleResultsContainers(
       result.awarded.length,
     );
 
-    blocks.push(createContentBlock([resultLines.join("\n\n")], resultsHeader));
+    blocks.push(createContentBlock(resultBlocks, resultsHeader));
   }
 
   // Check if no one is eligible for any points (no results and no issues)
@@ -202,32 +209,21 @@ export function buildTempleResultsContainers(
       a.placement - b.placement,
   );
 
-  const issueLines: string[] = allIssues.map(
-    (issue: IssueWithPlacement): string => issue.text,
-  );
+  const issueBlocks: string[] = [];
+
+  allIssues.forEach((issue: IssueWithPlacement, idx: number): void => {
+    issueBlocks.push(issue.text + (idx < allIssues.length - 1 ? "\n" : ""));
+  });
 
   // Add issues block if there are any issues
-  if (issueLines.length > 0) {
+  if (issueBlocks.length > 0) {
     const totalIssues: number =
       result.missingRole.length +
       result.invalidSpreadsheetData.length +
       result.notInSpreadsheet.length;
 
     const issuesHeader: string = TEMPLE_MESSAGES.issuesHeader(totalIssues);
-    const contentWithSpacing: string[] = [];
-
-    for (let i = 0; i < issueLines.length; i++) {
-      let issueText: string = issueLines[i];
-
-      // Add blank line after each issue except the last one
-      if (i < issueLines.length - 1) {
-        issueText += "\n";
-      }
-
-      contentWithSpacing.push(issueText);
-    }
-
-    blocks.push(createContentBlock(contentWithSpacing, issuesHeader));
+    blocks.push(createContentBlock(issueBlocks, issuesHeader));
   }
 
   if (transactionID) {
