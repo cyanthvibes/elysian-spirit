@@ -133,11 +133,11 @@ export function buildTransactionHistoryOrAuditContainers(
       if (undoneAt && undoneBy) {
         sectionHeader = `${strikethrough(sectionHeader)}`;
 
+        const undoneAtTimestamp: number = Math.floor(undoneAt.getTime() / 1000);
+
         content = content.map(
           (line: string): string => `${strikethrough(line)}`,
         );
-
-        const undoneAtTimestamp: number = Math.floor(undoneAt.getTime() / 1000);
 
         content.push(
           TRANSACTION_MESSAGES.undoneByLine(
