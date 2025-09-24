@@ -130,7 +130,6 @@ export function buildTransactionHistoryOrAuditContainers(
 
       let content: string[] = [reasonLine, ...actionLines, transactionLine];
 
-      // If a transaction is undone, add an extra line
       if (undoneAt && undoneBy) {
         sectionHeader = `${strikethrough(sectionHeader)}`;
 
@@ -148,7 +147,50 @@ export function buildTransactionHistoryOrAuditContainers(
         );
       }
 
-      blocks.push(createContentBlock(content, sectionHeader));
+      const groupedLines: string[] = [];
+
+      // Only one transaction line: group everything together to prevent splitting
+      if (actionLines.length === 1) {
+        let singleBlock: string =
+          sectionHeader +
+          "\n" +
+          reasonLine +
+          "\n" +
+          actionLines[0] +
+          "\n" +
+          transactionLine;
+
+        // If undone line exists, append it
+        if (content.length > actionLines.length + 2) {
+          singleBlock += "\n\n" + content[content.length - 1];
+        }
+
+        groupedLines.push(singleBlock);
+
+        // Multiple transaction lines: group header + reason + first transaction line
+      } else {
+        groupedLines.push(
+          sectionHeader + "\n" + reasonLine + "\n" + actionLines[0],
+        );
+
+        // Middle transaction lines
+        for (let i = 1; i < actionLines.length - 1; i++) {
+          groupedLines.push(actionLines[i]);
+        }
+
+        // Group last transaction line with transaction ID
+        let lastGroup: string =
+          actionLines[actionLines.length - 1] + "\n" + transactionLine;
+
+        // If undone line exists, group with transaction ID
+        if (content.length > actionLines.length + 2) {
+          lastGroup += "\n\n" + content[content.length - 1];
+        }
+
+        groupedLines.push(lastGroup);
+      }
+
+      blocks.push(createContentBlock(groupedLines, undefined));
     });
   }
 
