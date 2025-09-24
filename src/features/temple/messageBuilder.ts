@@ -36,7 +36,7 @@ export function buildTempleResultsContainers(
     const resultBlocks: string[] = [];
 
     result.awarded.forEach(
-      (awarded: TempleAwardedMember, idx: number): void => {
+      (awarded: TempleAwardedMember, index: number): void => {
         const memberMention = `${userMention(awarded.discordID)}`;
 
         const placementsLine: string = TEMPLE_MESSAGES.placementLine(
@@ -62,7 +62,7 @@ export function buildTempleResultsContainers(
           .join("\n");
 
         resultBlocks.push(
-          block + (idx < result.awarded.length - 1 ? "\n" : ""),
+          block + (index < result.awarded.length - 1 ? "\n" : ""),
         );
       },
     );
@@ -211,8 +211,8 @@ export function buildTempleResultsContainers(
 
   const issueBlocks: string[] = [];
 
-  allIssues.forEach((issue: IssueWithPlacement, idx: number): void => {
-    issueBlocks.push(issue.text + (idx < allIssues.length - 1 ? "\n" : ""));
+  allIssues.forEach((issue: IssueWithPlacement, index: number): void => {
+    issueBlocks.push(issue.text + (index < allIssues.length - 1 ? "\n" : ""));
   });
 
   // Add issues block if there are any issues
