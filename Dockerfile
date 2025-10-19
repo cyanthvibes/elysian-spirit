@@ -1,8 +1,10 @@
-FROM node:alpine
+FROM node:lts
 
 WORKDIR /app
 
-RUN apk update && apk add --no-cache postgresql17-client
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends postgresql-client && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json ./
 
