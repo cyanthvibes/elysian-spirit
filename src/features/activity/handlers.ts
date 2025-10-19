@@ -1,3 +1,5 @@
+import { getRoleID } from "config/configUtils.js";
+import { ROLE_KEYS } from "constants/roles.js";
 import {
   ensureMembers,
   getInactiveMembers,
@@ -87,9 +89,21 @@ export async function handleInactivityInteraction(
     return;
   }
 
-  const inactiveMemberIDs: string[] = inactiveMembers.map(
-    (member: { discordID: string }): string => member.discordID,
+  const memberRoleID: string = getRoleID(
+    interaction.guild.id,
+    ROLE_KEYS.MEMBER_PERMS,
   );
+
+  // Get a map of all inactive member IDs where the member has the member perms role
+  const inactiveMemberIDs: string[] = inactiveMembers
+    .map(({ discordID }: { discordID: string }): null | string => {
+      const member: GuildMember | undefined = members.get(discordID);
+      if (member && member.roles.cache.has(memberRoleID)) {
+        return member.id;
+      }
+      return null;
+    })
+    .filter((id: null | string): id is string => id !== null);
 
   if (subcommand === "check") {
     const containers: ContainerBuilder[] = buildInactivityCheckContainers(
