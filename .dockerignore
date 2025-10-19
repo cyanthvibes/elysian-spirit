@@ -19,7 +19,7 @@ logs/
 # Development files
 *.md
 LICENSE
-logo.png
+assets/logos/logo.png
 
 # Git
 .git/

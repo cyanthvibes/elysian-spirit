@@ -1,6 +1,6 @@
 <div align="center">
 <h1>Elysian Spirit</h1>
-<img src="logo.png" alt="Elysian Spirit logo" width="250">
+<img src="assets/logos/logo.png" alt="Elysian Spirit logo" width="250">
 
 <p>
 <strong><i>
