@@ -86,7 +86,7 @@ export const TEMPLE_MESSAGES = {
         | TempleNotInSpreadsheetMember = placements[0];
       const medal: string = getMedalEmoji(placement.placement);
 
-      return `${bold("Placement")} ${medal}${ordinalSuffix(placement.placement)} place`;
+      return `${bold("Placement")}: ${medal}${ordinalSuffix(placement.placement)} place`;
 
       // If there is more than one placement
     } else if (placements.length > 1) {
