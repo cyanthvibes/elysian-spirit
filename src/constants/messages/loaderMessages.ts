@@ -18,7 +18,7 @@ export const LOADER_MESSAGE = {
   G_C_VALIDATED_SUCCESSFULLY: `${EMOJIS.SUCCESS} Google credentials successfully validated!`,
 
   googleCredentialsLoadError: (err: unknown): string =>
-    `${EMOJIS.ERROR} Failed to load Google credentials:\n${err}`,
+    [`${EMOJIS.ERROR} Failed to load Google credentials:`, `${err}`].join("\n"),
 
   googleCredentialsNotFoundForGuild: (
     guildID: string,
@@ -43,27 +43,36 @@ export const LOADER_MESSAGE = {
   INVALID_NODE_ENV: `${EMOJIS.ERROR} NODE_ENV must be set to "development" or "production"`,
 
   invalidConfig: (configFile: string, issues: $ZodIssue[]): string => {
-    return `${EMOJIS.ERROR} Invalid config file: ${configFile}\n${issues
-      .map((err: $ZodIssue): string => `${err.path} - ${err.message}`)
-      .join("\n")}`;
+    return [
+      `${EMOJIS.ERROR} Invalid config file: ${configFile}`,
+      `${issues
+        .map((err: $ZodIssue): string => `${err.path} - ${err.message}`)
+        .join("\n")}`,
+    ].join("\n");
   },
   invalidEnvironmentVariable: (
     issues: $ZodIssue[],
     envFile: string,
   ): string => {
-    return `${EMOJIS.ERROR} Invalid environment ${pluralise(issues.length, "variable")} in: ${envFile}\n${issues
-      .map((err: $ZodIssue): string => `${err.path} - ${err.message}`)
-      .join("\n")}`;
+    return [
+      `${EMOJIS.ERROR} Invalid environment ${pluralise(issues.length, "variable")} in: ${envFile}`,
+      `${issues
+        .map((err: $ZodIssue): string => `${err.path} - ${err.message}`)
+        .join("\n")}`,
+    ].join("\n");
   },
 
   invalidGoogleCredentialsForGuild: (
     guildID: string,
     issues: $ZodIssue[],
   ): string => {
-    return `${EMOJIS.ERROR} Invalid Google credentials for guild ${guildID}\n${issues
-      .map((err: $ZodIssue): string => `${err.path} - ${err.message}`)
-      .join("\\n")};
-    `;
+    return [
+      `${EMOJIS.ERROR} Invalid Google credentials for guild ${guildID}`,
+      `${issues
+        .map((err: $ZodIssue): string => `${err.path} - ${err.message}`)
+        .join("\\n")};
+    `,
+    ].join("\n");
   },
 
   loadingModule: (name: string): string =>
@@ -74,10 +83,16 @@ export const LOADER_MESSAGE = {
     fileName: string,
     errors: $ZodIssue[],
   ): string =>
-    `${EMOJIS.ERROR} Error in ${name} file '${fileName}':\n${formatValidationErrors(errors || [])}`,
+    [
+      `${EMOJIS.ERROR} Error in ${name} file '${fileName}':`,
+      `${formatValidationErrors(errors || [])}`,
+    ].join("\n"),
 
   loadingModuleFailed: (name: string, fileName: string, err: unknown): string =>
-    `${EMOJIS.ERROR} Failed to load ${name} file '${fileName}':\n${err instanceof Error ? err.stack : err}`,
+    [
+      `${EMOJIS.ERROR} Failed to load ${name} file '${fileName}':`,
+      `${err instanceof Error ? err.stack : err}`,
+    ].join("\n"),
 
   loadingModulesSummary: (size: number, name: string): string =>
     `${EMOJIS.SUCCESS} Successfully loaded ${size} ${pluralise(size, name)}`,

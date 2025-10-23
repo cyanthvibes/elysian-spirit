@@ -21,7 +21,10 @@ export const TRANSACTION_MESSAGES = {
   FIRST_REPLY_HEADER: `${EMOJIS.CHECKING} Getting transactions....`,
 
   header: (target: User, fromDate: string, toDate: string): string => {
-    return `${EMOJIS.HISTORY} ${bold("Transaction history for")} ${target}\n${EMOJIS.DATE} ${bold("From")} ${fromDate} ${bold("to")} ${toDate}`;
+    return [
+      `${EMOJIS.HISTORY} ${bold("Transaction history for")} ${target}`,
+      `${EMOJIS.DATE} ${bold("From")} ${fromDate} ${bold("to")} ${toDate}`,
+    ].join("\n");
   },
 
   headerDateCapped: (): string => {

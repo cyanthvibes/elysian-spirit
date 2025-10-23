@@ -50,10 +50,14 @@ export const HELP_MESSAGES = {
   // Returns a usage label for a command type
   getLabelForType: (type?: ApplicationCommandType): string => {
     if (type === undefined) return "";
+
     if (type === ApplicationCommandType.ChatInput)
       return `use a ${inlineCode("/")}`;
-    if (type === ApplicationCommandType.User) return "right-click a member";
+
+    if (type === ApplicationCommandType.User) return "right-click a user";
+
     if (type === ApplicationCommandType.Message) return "right-click a message";
+
     return "";
   },
 
@@ -78,8 +82,11 @@ export const HELP_MESSAGES = {
     }
 
     if (labels.length === 0) return "";
+
     if (labels.length === 1) return `(${labels[0]})`;
+
     if (labels.length === 2) return `(${labels[0]} or ${labels[1]})`;
+
     return `(${labels.slice(0, -1).join(", ")}, or ${labels[labels.length - 1]})`;
   },
 

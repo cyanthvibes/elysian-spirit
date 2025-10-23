@@ -2,13 +2,16 @@ import { EMOJIS } from "constants/emojis.js";
 
 export const REPOSITORY_MESSAGES = {
   failedToEnsureGuild: (guildID: string, err: unknown): string =>
-    `${EMOJIS.ERROR} Failed to ensure guild ${guildID} exists:\n${err}`,
+    [
+      `${EMOJIS.ERROR} Failed to ensure guild ${guildID} exists:`,
+      `${err}`,
+    ].join("\n"),
 
   failedToEnsureMembers: (err: unknown): string =>
-    `Error ensuring members:\n${err}`,
+    [`Error ensuring members:`, `${err}`].join("\n"),
 
   failedToFetchMembers: (err: unknown): string =>
-    `${EMOJIS.ERROR} Error fetching inactive members:\n${err}`,
+    [`${EMOJIS.ERROR} Error fetching inactive members:`, `${err}`].join("\n"),
 
   TRANSACTION_HAS_ALREADY_BEEN_UNDONE: `${EMOJIS.ERROR} Transaction has already been undone.`,
   TRANSACTION_NOT_FOUND: `${EMOJIS.ERROR} Transaction not found.`,
@@ -23,17 +26,21 @@ export const REPOSITORY_MESSAGES = {
   UNABLE_TO_UPDATE_MEMBER_ACTIVITY: `${EMOJIS.ERROR} Unable to update member activity. Please try again later.`,
 
   unableToFetchTransactions: (err: unknown): string =>
-    `${EMOJIS.ERROR} Error fetching clan point transactions:\n${err}`,
+    [`${EMOJIS.ERROR} Error fetching clan point transactions:`, `${err}`].join(
+      "\n",
+    ),
 
   unableToModifyClanPoints: (err: unknown): string =>
-    `${EMOJIS.ERROR} Error modifying clan points:\n${err}`,
+    [`${EMOJIS.ERROR} Error modifying clan points:`, `${err}`].join("\n"),
 
   unableToRetrieveClanPoints: (err: unknown): string =>
-    `${EMOJIS.ERROR} Error retrieving clan points:\n${err}`,
+    [`${EMOJIS.ERROR} Error retrieving clan points:`, `${err}`].join("\n"),
 
   unableToUndoTransactions: (err: unknown): string =>
-    `${EMOJIS.ERROR} Error undoing transaction:\n${err}`,
+    [`${EMOJIS.ERROR} Error undoing transaction:`, `${err}`].join("\n"),
 
   unableToUpdateMemberActivity: (err: unknown): string =>
-    `${EMOJIS.ERROR} Error updating last message sent at:\n${err}`,
+    [`${EMOJIS.ERROR} Error updating last message sent at:`, `${err}`].join(
+      "\n",
+    ),
 } as const;

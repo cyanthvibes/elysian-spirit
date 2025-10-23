@@ -19,9 +19,11 @@ export function formatValidationErrors(
   if (errorEntries.length === 0) return null;
 
   return errorEntries
-    .map(
-      ([key, errors]: [string, string[]]): string =>
-        `${keyLabel} ${key}:\n${errors.map((error: string): string => `- ${error}`).join("\n")}`,
+    .map(([key, errors]: [string, string[]]): string =>
+      [
+        `${keyLabel} ${key}:`,
+        `${errors.map((error: string): string => `- ${error}`).join("\n")}`,
+      ].join("\n"),
     )
     .join("\n\n");
 }
@@ -42,8 +44,14 @@ export function reportValidationResult(
   if (errorLog) {
     const message: string =
       context === "reload"
-        ? `${errorMessagePrefix} reloaded with ${pluralise(errorCount, "error")}:\n${errorLog}`
-        : `${EMOJIS.ERROR} ${pluralise(errorCount, "Error")} found in ${errorMessagePrefix}:\n${errorLog}`;
+        ? [
+            `${errorMessagePrefix} reloaded with ${pluralise(errorCount, "error")}:`,
+            `${errorLog}`,
+          ].join("\n")
+        : [
+            `${EMOJIS.ERROR} ${pluralise(errorCount, "Error")} found in ${errorMessagePrefix}:`,
+            `${errorLog}`,
+          ].join("\n");
 
     return { hasErrors: true, message };
   }

@@ -73,7 +73,12 @@ export const TEMPLE_MESSAGES = {
     placementsLine: string,
     gainLine: string,
   ): string => {
-    return `${inlineCode(name)}\n${placementsLine}\n${gainLine}\n${bold("Issue")}: Not found in spreadsheet`;
+    return [
+      `${inlineCode(name)}`,
+      `${placementsLine}`,
+      `${gainLine}`,
+      `${bold("Issue")}: Not found in spreadsheet`,
+    ].join("\n");
   },
 
   placementLine: (

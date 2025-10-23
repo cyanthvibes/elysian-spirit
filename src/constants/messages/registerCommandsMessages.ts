@@ -9,18 +9,23 @@ export const REGISTER_COMMANDS_MESSAGES = {
     `Successfully cleared guild commands for guild ${guildID}`,
 
   errorClearingGlobalCommands: (err: unknown): string =>
-    `Error clearing global commands:\n${err}`,
+    [`Error clearing global commands:`, `${err}`].join("\n"),
 
   errorClearingGuildCommands: (guildID: string, err: unknown): string =>
-    `Error clearing guild commands for guild ${guildID}:\n${err}`,
+    [`Error clearing guild commands for guild ${guildID}:`, `${err}`].join(
+      "\n",
+    ),
 
   errorDuringRegistration: (err: unknown): string =>
-    `Unexpected error during registration:\n${err}`,
+    [`Unexpected error during registration:`, `${err}`].join("\n"),
+
   errorRegisteringGlobalCommands: (err: unknown): string =>
-    `Error registering global commands:\n${err}`,
+    [`Error registering global commands:`, `${err}`].join("\n"),
 
   errorRegisteringGuildCommands: (guildID: string, err: unknown): string =>
-    `Error registering guild commands for guild ${guildID}:\n${err}`,
+    [`Error registering guild commands for guild ${guildID}:`, `${err}`].join(
+      "\n",
+    ),
 
   INVALID_FIRST_ARGUMENT:
     'Please specify "guild" or "global" as the first argument',

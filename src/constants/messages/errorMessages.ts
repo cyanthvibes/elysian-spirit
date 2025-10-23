@@ -8,14 +8,17 @@ export const ERROR_MESSAGES = {
     err: unknown,
     interaction: AutocompleteInteraction,
   ): string =>
-    `Unexpected error: ${err instanceof Error ? err.stack : String(err)}\n${interaction}`,
+    [
+      `Unexpected error: ${err instanceof Error ? err.stack : String(err)}`,
+      `${interaction}`,
+    ].join("\n"),
 
   unexpectedError: (err: unknown): string =>
     `Unexpected error: ${err instanceof Error ? err.stack : String(err)}`,
 
   unexpectedInteractionError: (err: unknown): string =>
-    `Error handling interaction error:\n${err}`,
+    [`Error handling interaction error:`, `${err}`].join("\n"),
 
   unexpectedMessageError: (err: unknown): string =>
-    `Error handling message command error:\n${err}`,
+    [`Error handling message command error:`, `${err}`].join("\n"),
 } as const;

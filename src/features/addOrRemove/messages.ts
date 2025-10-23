@@ -40,7 +40,10 @@ export const ADD_OR_REMOVE_MESSAGES = {
     count: number,
     reason: string,
   ): string => {
-    return `${addingOrRemoving} ${bold(formatNumber(amount))} ${pluralise(amount, "point")} ${fromOrTo} ${bold(String(count))} ${pluralise(count, "member")}\n${EMOJIS.REASON} ${bold("Reason")}: ${reason}`;
+    return [
+      `${addingOrRemoving} ${bold(formatNumber(amount))} ${pluralise(amount, "point")} ${fromOrTo} ${bold(String(count))} ${pluralise(count, "member")}`,
+      `${EMOJIS.REASON} ${bold("Reason")}: ${reason}`,
+    ].join("\n");
   },
 
   NO_VALID_MEMBERS: `${EMOJIS.ERROR} No valid @members found in your input.`,
