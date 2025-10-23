@@ -29,7 +29,7 @@ export default class InactivitySlashCommand extends SlashCommand {
     super();
     this.data
       .setName("inactivity")
-      .setDescription("Check for inactivity ")
+      .setDescription("Check for inactivity")
       .addSubcommand(
         (
           subcommand: SlashCommandSubcommandBuilder,
