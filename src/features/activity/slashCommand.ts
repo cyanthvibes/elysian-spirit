@@ -6,6 +6,7 @@ import {
   AutocompleteInteraction,
   ChatInputCommandInteraction,
   SlashCommandIntegerOption,
+  SlashCommandRoleOption,
   SlashCommandStringOption,
   SlashCommandSubcommandBuilder,
 } from "discord.js";
@@ -44,6 +45,12 @@ export default class InactivitySlashCommand extends SlashCommand {
                     `Number of days to consider as inactive (defaults to ${DEFAULT_INACTIVITY_DAYS} days)`,
                   )
                   .setMinValue(1),
+            )
+            .addRoleOption(
+              (option: SlashCommandRoleOption): SlashCommandRoleOption =>
+                option
+                  .setName("role")
+                  .setDescription("Only check for users with specified role"),
             ),
       )
       .addSubcommand(
@@ -67,8 +74,14 @@ export default class InactivitySlashCommand extends SlashCommand {
                 option
                   .setName("members")
                   .setDescription(
-                    "List of members (mention them). All inactive members will be de-ranked.",
+                    "List of members (mention them) to de-rank. All inactive members will be de-ranked.",
                   ),
+            )
+            .addRoleOption(
+              (option: SlashCommandRoleOption): SlashCommandRoleOption =>
+                option
+                  .setName("role")
+                  .setDescription("Only de-rank users with specified role"),
             ),
       );
 

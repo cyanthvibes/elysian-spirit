@@ -5,11 +5,13 @@ import {
   getInactiveMembers,
 } from "database/repositories/members/memberRepository.js";
 import {
+  APIRole,
   ChatInputCommandInteraction,
   Collection,
   ContainerBuilder,
   GuildMember,
   MessageFlags,
+  Role,
 } from "discord.js";
 import { DEFAULT_INACTIVITY_DAYS } from "src/features/activity/constants.js";
 import {
@@ -32,12 +34,16 @@ export async function handleInactivityInteraction(
   // Get subcommand from interaction
   const subcommand: string = interaction.options.getSubcommand();
 
-  // Get the number of days specified by the member
+  // Get the number of days
   const days: number =
     interaction.options.getInteger("days") ?? DEFAULT_INACTIVITY_DAYS;
 
-  // Get members to check inactivity for specified by the member
-  const rawInput: string = interaction.options.getString("member") ?? "";
+  // Get members to de-rank
+  const usersToCheck: string = interaction.options.getString("member") ?? "";
+
+  // Get the role to check inactivity for
+  const roleToCheck: APIRole | null | Role =
+    interaction.options.getRole("role");
 
   if (subcommand === "check") {
     await interaction.reply({
@@ -98,7 +104,12 @@ export async function handleInactivityInteraction(
   const inactiveMemberIDs: string[] = inactiveMembers
     .map(({ discordID }: { discordID: string }): null | string => {
       const member: GuildMember | undefined = members.get(discordID);
-      if (member && member.roles.cache.has(memberRoleID)) {
+      if (
+        member &&
+        (roleToCheck
+          ? member.roles.cache.has(roleToCheck.id)
+          : member.roles.cache.has(memberRoleID))
+      ) {
         return member.id;
       }
       return null;
@@ -116,11 +127,11 @@ export async function handleInactivityInteraction(
     let membersToDeRank: string[] = inactiveMemberIDs;
 
     // If members were specified
-    if (rawInput) {
+    if (usersToCheck) {
       // Parse provided mentions
       const specifiedMemberIDs: string[] = await parseMemberMentions(
         interaction.guild,
-        rawInput,
+        usersToCheck,
       );
 
       // Only de-rank inactive members that were specified by the member
@@ -130,8 +141,11 @@ export async function handleInactivityInteraction(
     }
 
     // Otherwise, de-rank all inactive members
+
+    // The ability to return already de-ranked members is implemented,
+    // but is disabled underneath.
     const {
-      alreadyDeRanked,
+      // alreadyDeRanked,
       deRanked,
     }: { alreadyDeRanked: string[]; deRanked: string[] } = await deRankMembers(
       interaction.guild,
@@ -140,7 +154,8 @@ export async function handleInactivityInteraction(
 
     const containers: ContainerBuilder[] = buildInactivityDeRankContainers(
       deRanked,
-      alreadyDeRanked,
+      [],
+      // alreadyDeRanked,
       days,
     );
 
