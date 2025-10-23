@@ -16,7 +16,7 @@ export const BALANCE_MESSAGES = {
 
   invalidActionType: (type: string): string => `Invalid action type: ${type}`,
 
-  label: (isSelf: boolean, userID: string): string => {
-    return isSelf ? "Your" : `${userMention(userID)}'s`;
+  label: (isSelf: boolean, memberID: string): string => {
+    return isSelf ? "Your" : `${userMention(memberID)}'s`;
   },
 } as const;
