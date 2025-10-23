@@ -261,7 +261,7 @@ function validateDiscordMatching(
 
         // If the ambiguous name is found in a name of a Discord member
         if (memberNames.includes(name)) {
-          // Add that Discord user's id to the set
+          // Add that Discord member's ID to the set
           ambiguousDiscordIDs.add(member.id);
         }
       });
@@ -431,7 +431,7 @@ function validateRow(
   errors = errors.concat(validateNameUniqueness(row, rsnUsage, altUsage));
   errors = errors.concat(validateDiscordIDUniqueness(row, discordIDUsage));
 
-  // Try to match any names in the row to a Discord user and get errors and optionally the Discord ID to be populated
+  // Try to match any names in the row to a Discord member and get errors and optionally the Discord ID to be populated
   const discordMatchResult: {
     discordIDToBePopulated?: string;
     errors: SpreadsheetValidationError[];

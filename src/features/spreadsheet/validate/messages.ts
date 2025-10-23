@@ -21,9 +21,9 @@ export const SPREADSHEET_MESSAGES = {
   ambiguousDiscordMatch: (
     row: SpreadsheetRow,
     ambiguousMatches: string[],
-    userMentions: string,
+    memberMentions: string,
   ): string => {
-    return `Multiple Discord members have the ${createNameDescription(row, ambiguousMatches)} in their display name: ${userMentions}`;
+    return `Multiple Discord members have the ${createNameDescription(row, ambiguousMatches)} in their display name: ${memberMentions}`;
   },
 
   contentBlockHeader: (count: number): string => {
@@ -53,7 +53,7 @@ export const SPREADSHEET_MESSAGES = {
     row: SpreadsheetRow,
     allNormalisedNames: string[],
   ): string => {
-    return `No Discord user matches ${createNameDescription(row, allNormalisedNames)}`;
+    return `No Discord member matches ${createNameDescription(row, allNormalisedNames)}`;
   },
 
   rowIssues: (issue: string): string => `- ${issue}`,

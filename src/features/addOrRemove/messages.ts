@@ -19,10 +19,10 @@ export const ADD_OR_REMOVE_MESSAGES = {
     addedOrRemoved: string,
     amount: number,
     fromOrTo: string,
-    userID: string,
+    memberID: string,
     newBalance: number,
   ): string => {
-    return `${addedOrRemoved} ${bold(formatNumber(amount))} ${pluralise(amount, "point")} ${fromOrTo} ${userMention(userID)}. New balance: ${bold(formatNumber(newBalance))}`;
+    return `${addedOrRemoved} ${bold(formatNumber(amount))} ${pluralise(amount, "point")} ${fromOrTo} ${userMention(memberID)}. New balance: ${bold(formatNumber(newBalance))}`;
   },
 
   firstReplyHeader: (addingOrRemoving: string, amount: number): string => {

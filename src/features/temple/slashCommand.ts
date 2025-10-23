@@ -46,7 +46,7 @@ export default class TempleSlashCommand extends SlashCommand {
         (option: SlashCommandIntegerOption): SlashCommandIntegerOption =>
           option
             .setName("max_clan_points")
-            .setDescription("Maximum clan points any single user can receive")
+            .setDescription("Maximum clan points any single member can receive")
             .setRequired(true),
       )
       .addIntegerOption(

@@ -34,13 +34,13 @@ export async function handleHelpAutocomplete(
   const member = interaction.member as GuildMember;
 
   // Get all role IDs for the member
-  const userRoleIDs = new Set(member.roles.cache.keys());
+  const memberRoleIDs = new Set(member.roles.cache.keys());
 
   // Get all accessible help entries for this member
   const helpEntries: AccessibleHelpEntry[] = getAccessibleHelpEntries(
     client,
     interaction.guild.id,
-    userRoleIDs,
+    memberRoleIDs,
   );
 
   const choicesSet = new Set<string>();
@@ -50,7 +50,7 @@ export async function handleHelpAutocomplete(
     choicesSet.add(entry.name);
   }
 
-  // Filter choices by user input and format for Discord
+  // Filter choices by member input and format for Discord
   const filtered: { name: string; value: string }[] = Array.from(choicesSet)
     // Only keep choices that match the focusedValue
     .filter((choice: string): boolean => choice.includes(focusedValue))

@@ -50,7 +50,7 @@ export default class InactivitySlashCommand extends SlashCommand {
               (option: SlashCommandRoleOption): SlashCommandRoleOption =>
                 option
                   .setName("role")
-                  .setDescription("Only check for users with specified role"),
+                  .setDescription("Only check for members with specified role"),
             ),
       )
       .addSubcommand(
@@ -81,7 +81,7 @@ export default class InactivitySlashCommand extends SlashCommand {
               (option: SlashCommandRoleOption): SlashCommandRoleOption =>
                 option
                   .setName("role")
-                  .setDescription("Only de-rank users with specified role"),
+                  .setDescription("Only de-rank members with specified role"),
             ),
       );
 

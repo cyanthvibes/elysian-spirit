@@ -39,7 +39,7 @@ export async function handleInactivityInteraction(
     interaction.options.getInteger("days") ?? DEFAULT_INACTIVITY_DAYS;
 
   // Get members to de-rank
-  const usersToCheck: string = interaction.options.getString("member") ?? "";
+  const membersToCheck: string = interaction.options.getString("member") ?? "";
 
   // Get the role to check inactivity for
   const roleToCheck: APIRole | null | Role =
@@ -127,11 +127,11 @@ export async function handleInactivityInteraction(
     let membersToDeRank: string[] = inactiveMemberIDs;
 
     // If members were specified
-    if (usersToCheck) {
+    if (membersToCheck) {
       // Parse provided mentions
       const specifiedMemberIDs: string[] = await parseMemberMentions(
         interaction.guild,
-        usersToCheck,
+        membersToCheck,
       );
 
       // Only de-rank inactive members that were specified by the member

@@ -51,20 +51,20 @@ export function buildAddOrRemoveContainers({
   if (allowedArray.length > 0) {
     blocks.push(
       createContentBlock(
-        allowedArray.map((userID: string): string => {
-          const currentBalance: number = runningBalances.get(userID) ?? 0;
+        allowedArray.map((memberID: string): string => {
+          const currentBalance: number = runningBalances.get(memberID) ?? 0;
           const newBalance: number = calculateNewBalance(
             actionType,
             currentBalance,
             amount,
           );
-          runningBalances.set(userID, newBalance);
+          runningBalances.set(memberID, newBalance);
 
           return ADD_OR_REMOVE_MESSAGES.contentBlockContent(
             addedOrRemoved,
             amount,
             fromOrTo,
-            userID,
+            memberID,
             newBalance,
           );
         }),

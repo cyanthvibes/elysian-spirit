@@ -52,7 +52,7 @@ export const HELP_MESSAGES = {
     if (type === undefined) return "";
     if (type === ApplicationCommandType.ChatInput)
       return `use a ${inlineCode("/")}`;
-    if (type === ApplicationCommandType.User) return "right-click a user";
+    if (type === ApplicationCommandType.User) return "right-click a member";
     if (type === ApplicationCommandType.Message) return "right-click a message";
     return "";
   },

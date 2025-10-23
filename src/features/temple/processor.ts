@@ -60,7 +60,7 @@ export function calculatePoints(
   // Calculate clan points from total gain
   const rawPoints: number = totalGain / config.gainPerClanPoint;
 
-  // First round down, then add another point if the user is close (90%) to earning another clan point
+  // First round down, then add another point if the member is close (90%) to earning another clan point
   const calculatedPoints: number =
     Math.floor(rawPoints) + (rawPoints % 1 >= 0.9 ? 1 : 0);
 
@@ -138,7 +138,7 @@ export async function processTempleCompetition(
   const discordNameMap: Map<string, string> =
     buildDiscordNameMapping(validRowsOnly);
 
-  const toBeAwardedDiscordUser: TempleAwardedMember[] = [];
+  const toBeAwardedDiscordMember: TempleAwardedMember[] = [];
   const discordMembersMissingRole: TempleInvalidMember[] = [];
   const participantsWithInvalidSpreadsheetData: TempleInvalidMember[] = [];
   const participantsNotFoundInSpreadsheet: TempleNotInSpreadsheetMember[] = [];
@@ -342,9 +342,9 @@ export async function processTempleCompetition(
       config,
     );
 
-    // Only add the Discord member to the toBeAwardedDiscordUser array if they are getting points
+    // Only add the Discord member to the toBeAwardedDiscordMember array if they are getting points
     if (user) {
-      toBeAwardedDiscordUser.push(user);
+      toBeAwardedDiscordMember.push(user);
     }
   }
 
@@ -380,7 +380,7 @@ export async function processTempleCompetition(
   }
 
   // Sort all arrays by the best placement
-  toBeAwardedDiscordUser.sort(
+  toBeAwardedDiscordMember.sort(
     (a: TempleAwardedMember, b: TempleAwardedMember): number =>
       a.bestPlacement - b.bestPlacement,
   );
@@ -444,12 +444,12 @@ export async function processTempleCompetition(
   // Build summary
   const summary = {
     affectedErrorsByRow: participantsAffectedErrorsByRow,
-    awardedCount: toBeAwardedDiscordUser.length,
+    awardedCount: toBeAwardedDiscordMember.length,
     invalidDataCount: participantsWithInvalidSpreadsheetData.length,
     missingRoleCount: discordMembersMissingRole.length,
     notInSpreadsheetCount: participantsNotFoundInSpreadsheet.length,
     totalParticipants: templeData.participants.length,
-    totalPointsAwarded: toBeAwardedDiscordUser.reduce(
+    totalPointsAwarded: toBeAwardedDiscordMember.reduce(
       (sum: number, award: TempleAwardedMember): number =>
         sum + award.cappedPoints,
       0,
@@ -457,7 +457,7 @@ export async function processTempleCompetition(
   };
 
   return {
-    awarded: toBeAwardedDiscordUser,
+    awarded: toBeAwardedDiscordMember,
     invalidSpreadsheetData: participantsWithInvalidSpreadsheetData,
     missingRole: discordMembersMissingRole,
     notInSpreadsheet: participantsNotFoundInSpreadsheet,
