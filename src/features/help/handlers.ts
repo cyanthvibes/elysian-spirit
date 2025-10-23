@@ -25,7 +25,7 @@ export async function handleHelpAutocomplete(
 ): Promise<void> {
   if (!interaction.guild || !interaction.member) return;
 
-  // Get argument from the interaction
+  // Get the focused value from the interaction
   const focusedValue: string = interaction.options
     .getFocused()
     .toLowerCase()

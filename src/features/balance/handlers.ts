@@ -48,8 +48,9 @@ export async function handleBalanceInteraction(
       ) {
         // The response will be ephemeral
         flags = MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral;
-      } else {
+
         // Otherwise, the response will be public
+      } else {
         flags = MessageFlags.IsComponentsV2;
       }
 

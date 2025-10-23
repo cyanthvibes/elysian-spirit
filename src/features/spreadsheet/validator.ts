@@ -356,6 +356,7 @@ function validateNameUniqueness(
   const errors: SpreadsheetValidationError[] = [];
   const normalisedRSN: string = normaliseName(row.rsn);
   const normalisedALTs: string[] = parseAlts(row.alts);
+
   const originalALTs: string[] = row.alts
     .split(",")
     .map((alt: string): string => alt.trim())
