@@ -65,11 +65,19 @@ export default class TransactionsSlashCommand extends SlashCommand {
             )
             .addStringOption(
               (option: SlashCommandStringOption): SlashCommandStringOption =>
-                option.setName("from").setDescription("Start date"),
+                option
+                  .setName("from")
+                  .setDescription("Start date")
+                  .setRequired(false)
+                  .setAutocomplete(false),
             )
             .addStringOption(
               (option: SlashCommandStringOption): SlashCommandStringOption =>
-                option.setName("to").setDescription("End date"),
+                option
+                  .setName("to")
+                  .setDescription("End date")
+                  .setRequired(false)
+                  .setAutocomplete(false),
             )
             .addIntegerOption(
               (option: SlashCommandIntegerOption): SlashCommandIntegerOption =>
@@ -79,7 +87,9 @@ export default class TransactionsSlashCommand extends SlashCommand {
                     `The maximum number of transactions to show (defaults to ${DEFAULT_TRANSACTION_LIMIT} transactions)`,
                   )
                   .setMinValue(1)
-                  .setMaxValue(MAX_TRANSACTION_LIMIT),
+                  .setMaxValue(MAX_TRANSACTION_LIMIT)
+                  .setRequired(false)
+                  .setAutocomplete(false),
             ),
       )
       .addSubcommand(
@@ -100,11 +110,19 @@ export default class TransactionsSlashCommand extends SlashCommand {
             )
             .addStringOption(
               (option: SlashCommandStringOption): SlashCommandStringOption =>
-                option.setName("from").setDescription("Start date"),
+                option
+                  .setName("from")
+                  .setDescription("Start date")
+                  .setRequired(false)
+                  .setAutocomplete(false),
             )
             .addStringOption(
               (option: SlashCommandStringOption): SlashCommandStringOption =>
-                option.setName("to").setDescription("End date"),
+                option
+                  .setName("to")
+                  .setDescription("End date")
+                  .setRequired(false)
+                  .setAutocomplete(false),
             )
             .addIntegerOption(
               (option: SlashCommandIntegerOption): SlashCommandIntegerOption =>
@@ -114,7 +132,9 @@ export default class TransactionsSlashCommand extends SlashCommand {
                     `The maximum number of transactions to show (defaults to ${DEFAULT_TRANSACTION_LIMIT} transactions)`,
                   )
                   .setMinValue(1)
-                  .setMaxValue(MAX_TRANSACTION_LIMIT),
+                  .setMaxValue(MAX_TRANSACTION_LIMIT)
+                  .setRequired(false)
+                  .setAutocomplete(false),
             ),
       );
 

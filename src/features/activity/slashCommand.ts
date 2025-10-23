@@ -44,13 +44,16 @@ export default class InactivitySlashCommand extends SlashCommand {
                   .setDescription(
                     `Number of days to consider as inactive (defaults to ${DEFAULT_INACTIVITY_DAYS} days)`,
                   )
-                  .setMinValue(1),
+                  .setMinValue(1)
+                  .setRequired(false)
+                  .setAutocomplete(false),
             )
             .addRoleOption(
               (option: SlashCommandRoleOption): SlashCommandRoleOption =>
                 option
                   .setName("role")
-                  .setDescription("Only check for members with specified role"),
+                  .setDescription("Only check for members with specified role")
+                  .setRequired(false),
             ),
       )
       .addSubcommand(
@@ -67,7 +70,9 @@ export default class InactivitySlashCommand extends SlashCommand {
                   .setDescription(
                     `Number of days to consider as inactive (defaults to ${DEFAULT_INACTIVITY_DAYS} days)`,
                   )
-                  .setMinValue(1),
+                  .setMinValue(1)
+                  .setRequired(false)
+                  .setAutocomplete(false),
             )
             .addStringOption(
               (option: SlashCommandStringOption): SlashCommandStringOption =>
@@ -75,13 +80,16 @@ export default class InactivitySlashCommand extends SlashCommand {
                   .setName("members")
                   .setDescription(
                     "List of members (mention them) to de-rank. All inactive members will be de-ranked.",
-                  ),
+                  )
+                  .setRequired(false)
+                  .setAutocomplete(false),
             )
             .addRoleOption(
               (option: SlashCommandRoleOption): SlashCommandRoleOption =>
                 option
                   .setName("role")
-                  .setDescription("Only de-rank members with specified role"),
+                  .setDescription("Only de-rank members with specified role")
+                  .setRequired(false),
             ),
       );
 

@@ -31,7 +31,8 @@ export default class UndoTransactionCommand extends SlashCommand {
           option
             .setName("transaction_id")
             .setDescription("Transaction ID to undo")
-            .setRequired(true),
+            .setRequired(true)
+            .setAutocomplete(false),
       );
 
     this.requiredRoleKeys = [ROLE_KEYS.CLAN_STAFF, ROLE_KEYS.MEMBER_PERMS];

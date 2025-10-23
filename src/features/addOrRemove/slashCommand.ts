@@ -48,20 +48,23 @@ export default class AddOrRemoveSlashCommand extends SlashCommand {
                   .setName("amount")
                   .setDescription("Amount of clan points to add")
                   .setMinValue(1)
-                  .setRequired(true),
+                  .setRequired(true)
+                  .setAutocomplete(false),
             )
             .addStringOption(
               (option: SlashCommandStringOption): SlashCommandStringOption =>
                 option
                   .setName("members")
                   .setDescription("List of members (mention them)")
-                  .setRequired(true),
+                  .setRequired(true)
+                  .setAutocomplete(false),
             )
             .addStringOption(
               (option: SlashCommandStringOption): SlashCommandStringOption =>
                 option
                   .setName("reason")
-                  .setDescription("Reason for adding clan points"),
+                  .setDescription("Reason for adding clan points")
+                  .setAutocomplete(false),
             ),
       )
       .addSubcommand(
@@ -77,20 +80,24 @@ export default class AddOrRemoveSlashCommand extends SlashCommand {
                   .setName("amount")
                   .setDescription("Amount of clan points to remove")
                   .setMinValue(1)
-                  .setRequired(true),
+                  .setRequired(true)
+                  .setAutocomplete(false),
             )
             .addStringOption(
               (option: SlashCommandStringOption): SlashCommandStringOption =>
                 option
                   .setName("members")
                   .setDescription("List of members (mention them)")
-                  .setRequired(true),
+                  .setRequired(true)
+                  .setAutocomplete(false),
             )
             .addStringOption(
               (option: SlashCommandStringOption): SlashCommandStringOption =>
                 option
                   .setName("reason")
-                  .setDescription("Reason for removing clan points"),
+                  .setDescription("Reason for removing clan points")
+                  .setRequired(false)
+                  .setAutocomplete(false),
             ),
       );
 

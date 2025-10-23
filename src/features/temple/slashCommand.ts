@@ -32,7 +32,8 @@ export default class TempleSlashCommand extends SlashCommand {
           option
             .setName("competition_id")
             .setDescription("TempleOSRS competition ID")
-            .setRequired(true),
+            .setRequired(true)
+            .setAutocomplete(false),
       )
       .addNumberOption(
         (option: SlashCommandNumberOption): SlashCommandNumberOption =>
@@ -40,35 +41,40 @@ export default class TempleSlashCommand extends SlashCommand {
             .setName("gain_per_clan_point")
             .setDescription("Gain (XP or KC) required for 1 clan point")
             .setMinValue(0)
-            .setRequired(true),
+            .setRequired(true)
+            .setAutocomplete(false),
       )
       .addIntegerOption(
         (option: SlashCommandIntegerOption): SlashCommandIntegerOption =>
           option
             .setName("max_clan_points")
             .setDescription("Maximum clan points any single member can receive")
-            .setRequired(true),
+            .setRequired(true)
+            .setAutocomplete(false),
       )
       .addIntegerOption(
         (option: SlashCommandIntegerOption): SlashCommandIntegerOption =>
           option
             .setName("first_place_cap")
             .setDescription("Maximum clan points for 1st place")
-            .setRequired(true),
+            .setRequired(true)
+            .setAutocomplete(false),
       )
       .addIntegerOption(
         (option: SlashCommandIntegerOption): SlashCommandIntegerOption =>
           option
             .setName("second_place_cap")
             .setDescription("Maximum clan points for 2nd place")
-            .setRequired(true),
+            .setRequired(true)
+            .setAutocomplete(false),
       )
       .addIntegerOption(
         (option: SlashCommandIntegerOption): SlashCommandIntegerOption =>
           option
             .setName("third_place_cap")
             .setDescription("Maximum clan points for 3rd place")
-            .setRequired(true),
+            .setRequired(true)
+            .setAutocomplete(false),
       );
 
     this.requiredRoleKeys = [ROLE_KEYS.CLAN_STAFF, ROLE_KEYS.MEMBER_PERMS];
