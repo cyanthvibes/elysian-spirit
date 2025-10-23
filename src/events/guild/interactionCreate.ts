@@ -14,7 +14,7 @@ import {
   MessageFlags,
   UserContextMenuCommandInteraction,
 } from "discord.js";
-import { trackActivity } from "src/features/activity/utils.js";
+// import { trackActivity } from "src/features/activity/utils.js";
 import { ContainerStyle } from "types/container.js";
 import { createSimpleContainers } from "utils/containers/containersBuilder.js";
 import { EphemeralError, PublicError } from "utils/errorUtils.js";
@@ -49,8 +49,11 @@ export default class InteractionCreateEvent extends Event<Events.InteractionCrea
       return;
     }
 
+    // Member activity is no longer tracked through interactions. The ability
+    // to do this is still present but commented out for now.
+
     // Track activity early, even if later on permission checks fail
-    await trackActivity(interaction.guild, interaction.user.id);
+    // await trackActivity(interaction.guild, interaction.user.id);
 
     if (interaction.isAutocomplete()) {
       const slashCommand: SlashCommand | undefined = client.slashCommands.get(
