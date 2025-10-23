@@ -36,7 +36,7 @@ export async function readSpreadsheetData(
   const guildConfig: GuildConfig = getGuildConfig(guildID);
 
   // Get sheet information from guild config
-  const { ALTS, DISCORD_ID, RSN } = guildConfig.SPREADSHEET_COLUMNS;
+  const { ALTS, DAYS, DISCORD_ID, RSN } = guildConfig.SPREADSHEET_COLUMNS;
   const { END_ROW, START_ROW } = guildConfig.SPREADSHEET_ROWS;
   const sheetName: string = guildConfig.SPREADSHEET_SHEET;
 
@@ -52,11 +52,15 @@ export async function readSpreadsheetData(
   const altRange: null | string = ALTS
     ? createRange(ALTS, START_ROW, ALTS, sheetName, END_ROW)
     : null;
+  const daysRange: null | string = DAYS
+    ? createRange(DAYS, START_ROW, DAYS, sheetName, END_ROW)
+    : null;
 
   // Read spreadsheet data
   const rsnRows: string[][] = await getValues(rsnRange);
   const discordIDRows: string[][] = await getValues(discordIDRange);
   const altRows: string[][] = altRange ? await getValues(altRange) : [];
+  const daysRows: string[][] = daysRange ? await getValues(daysRange) : [];
 
   // Determine the highest row count
   const rowCount: number = Math.max(
@@ -71,6 +75,7 @@ export async function readSpreadsheetData(
   for (let i = 0; i < rowCount; i++) {
     rows.push({
       alts: (altRows[i]?.[0] ?? "").trim(),
+      days: daysRows[i]?.[0] ? Number(daysRows[i][0]) : undefined,
       discordID: (discordIDRows[i]?.[0] ?? "").trim(),
       row: START_ROW + i,
       rsn: (rsnRows[i]?.[0] ?? "").trim(),

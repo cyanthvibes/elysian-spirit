@@ -41,6 +41,7 @@ export interface PopulationSummary {
 
 export interface SpreadsheetRow {
   alts: string;
+  days?: number;
   discordID: string;
   row: number;
   rsn: string;

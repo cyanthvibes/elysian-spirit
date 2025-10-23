@@ -20,7 +20,7 @@ Need help? DM [@cyanthvibes](https://discordapp.com/users/187286355435454466/) o
 - Track member activity in your Discord, and optionally via in-game clan chat
 - Manage clan points:
   - Add or remove clan points
-  - Allow users to claim clan points every day
+  - Allow members to claim clan points every day
   - Reward clan points based on TempleOSRS competition results
   - Robust tracking of transactions
 - Customisable config per Discord server
@@ -85,7 +85,7 @@ Create `config.json` based on `example_config.json`.
 
 You'll need to add configuration for every Discord server the bot will serve.
 
-`OSRS_CLAN_CHAT_CHANNEL` and `END_ROW` are optional. The `OSRS_CLAN_CHAT_CHANNEL` is the ID of the Discord text channel
+`OSRS_CLAN_CHAT_CHANNEL`, `DAYS`, and `END_ROW` are optional. The `OSRS_CLAN_CHAT_CHANNEL` is the ID of the Discord text channel
 where in-game clan chat is sent to using webhooks and the [Clan Chat Webhook](https://github.com/pascalla/clan-chat-webhook) Runelite plugin.
 
 ### 5. Google credentials

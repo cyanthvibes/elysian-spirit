@@ -14,7 +14,8 @@
       "SPREADSHEET_COLUMNS": {
         "RSN": "",
         "ALTS": "",
-        "DISCORD_ID": ""
+        "DISCORD_ID": "",
+        "DAYS": ""
       },
       "SPREADSHEET_ROWS": {
         "END_ROW": "",

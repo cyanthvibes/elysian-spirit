@@ -27,6 +27,10 @@ const guildConfigSchema = z.object({
       .string()
       .regex(/^[A-Z]+$/)
       .optional(),
+    DAYS: z
+      .string()
+      .regex(/^[A-Z]+$/)
+      .optional(),
     DISCORD_ID: z.string().regex(/^[A-Z]+$/),
     RSN: z.string().regex(/^[A-Z]+$/),
   }),
