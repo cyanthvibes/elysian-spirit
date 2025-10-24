@@ -1,12 +1,12 @@
 import { EMOJIS } from "constants/emojis.js";
 import { bold, userMention } from "discord.js";
-import { formatNumber } from "utils/formatUtils.js";
+import { formatNumber, pluralise } from "utils/formatUtils.js";
 
 export const DAYS_MESSAGES = {
   BOTS_NO_DAYS: `${EMOJIS.ERROR} You can't check this for bots.`,
 
   days: (label: string, numberOfDays: number): string => {
-    return `${EMOJIS.DATE} ${label} been in the clan for ${bold(formatNumber(numberOfDays))} days.`;
+    return `${EMOJIS.DATE} ${label} been in the clan for ${bold(formatNumber(numberOfDays))} ${pluralise(numberOfDays, "day")}.`;
   },
 
   daysNotFound: (label: string): string =>

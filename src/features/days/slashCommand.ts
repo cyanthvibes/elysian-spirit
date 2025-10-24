@@ -1,5 +1,6 @@
 import { ElysianSpirit } from "classes/client.js";
 import { SlashCommand } from "classes/slashCommand.js";
+import { CHANNEL_KEYS } from "constants/channels.js";
 import {
   AutocompleteInteraction,
   ChatInputCommandInteraction,
@@ -40,6 +41,8 @@ export default class DaysSlashCommand extends SlashCommand {
             )
             .setRequired(false),
       );
+
+    this.allowedChannelKeys = [CHANNEL_KEYS.BOT_CHANNEL];
   }
 
   async autocomplete(
