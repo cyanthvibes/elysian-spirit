@@ -36,10 +36,10 @@ export function resolveDateRange(
     from = DateTime.fromJSDate(fromParsed).toUTC();
     to = DateTime.fromJSDate(toParsed).toUTC();
 
-    // If only "from" is provided, use DEFAULT_TRANSACTION_DAYS
+    // If only "from" is provided, use "now"
   } else if (fromParsed) {
     from = DateTime.fromJSDate(fromParsed).toUTC();
-    to = from.plus({ days: DEFAULT_TRANSACTION_DAYS });
+    to = now;
 
     // If only "to" is provided, use DEFAULT_TRANSACTION_DAYS
   } else if (toParsed) {
