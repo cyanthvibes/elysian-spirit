@@ -89,6 +89,7 @@ export async function handleTransactionHistoryOrAuditInteraction(
       targetMember,
       to,
       transactions,
+      actionType,
     );
 
   await sendInteractionContainers(interaction, containers, false);

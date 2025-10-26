@@ -34,6 +34,7 @@ export function buildTransactionHistoryOrAuditContainers(
   target: User,
   to: DateTime,
   transactions: Awaited<ReturnType<typeof getClanPointsTransactions>>,
+  mode: ActionType,
 ): ContainerBuilder[] {
   const blocks: MessageBlock[] = [];
 
@@ -50,7 +51,12 @@ export function buildTransactionHistoryOrAuditContainers(
     const toDate = `${time(Math.floor(to.toSeconds()), TimestampStyles.LongDateTime)}`;
 
     // Create the header
-    let header: string = TRANSACTION_MESSAGES.header(target, fromDate, toDate);
+    let header: string = TRANSACTION_MESSAGES.header(
+      target,
+      fromDate,
+      toDate,
+      mode,
+    );
 
     if (dateCapped) {
       header += TRANSACTION_MESSAGES.headerDateCapped();
@@ -68,12 +74,20 @@ export function buildTransactionHistoryOrAuditContainers(
         actions,
         actionType,
         createdAt,
-
         performedBy,
         reason,
         undoneAt,
         undoneBy,
       } = transaction;
+
+      // Only keep transaction actions for the target member if the mode is ActionType.HISTORY
+      const filteredActions =
+        mode === ActionType.HISTORY
+          ? actions.filter(
+              (action: TransactionAction): boolean =>
+                action.targetMember.discordID === target.id,
+            )
+          : actions;
 
       // Format transaction date to Discord timestamp
       const date = `${time(Math.floor(createdAt.getTime() / 1000), TimestampStyles.ShortDateTime)}`;
@@ -90,7 +104,7 @@ export function buildTransactionHistoryOrAuditContainers(
       const reasonLine: string = TRANSACTION_MESSAGES.reason(reason);
 
       // Format all transactions in a transaction to a line
-      const actionLines: string[] = actions.map(
+      const actionLines: string[] = filteredActions.map(
         (action: TransactionAction): string => {
           const { amount, previousBalance, targetMember } = action;
 
@@ -121,6 +135,7 @@ export function buildTransactionHistoryOrAuditContainers(
             newBalance,
             amountPrefix,
             Math.abs(amount),
+            mode,
           );
         },
       );

@@ -14,15 +14,29 @@ export const TRANSACTION_MESSAGES = {
     newBalance: number,
     amountPrefix: string,
     amount: number,
+    actionType: ActionType,
   ): string => {
-    return `${userMention(discordID)}: ${formatNumber(previousBalance ?? 0)} → ${formatNumber(newBalance)} (${amountPrefix}${formatNumber(amount)})`;
+    const str = [
+      `- ${userMention(discordID)}: ${formatNumber(previousBalance ?? 0)} → ${formatNumber(newBalance)} (${amountPrefix}${formatNumber(amount)})`,
+    ];
+
+    if (actionType === ActionType.HISTORY) {
+      str.push("- ...actions affecting other members omitted");
+    }
+
+    return str.join("\n");
   },
 
   FIRST_REPLY_HEADER: `${EMOJIS.CHECKING} Getting transactions....`,
 
-  header: (target: User, fromDate: string, toDate: string): string => {
+  header: (
+    target: User,
+    fromDate: string,
+    toDate: string,
+    actionType: ActionType,
+  ): string => {
     return [
-      `${EMOJIS.HISTORY} ${bold("Transaction history for")} ${target}`,
+      `${EMOJIS.HISTORY} ${bold(`Transaction ${actionType.toLowerCase()} for`)} ${target}`,
       `${EMOJIS.DATE} ${bold("From")} ${fromDate} ${bold("to")} ${toDate}`,
     ].join("\n");
   },
