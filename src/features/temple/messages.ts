@@ -89,6 +89,7 @@ export const TEMPLE_MESSAGES = {
       const placement:
         | ProcessedTempleParticipant
         | TempleNotInSpreadsheetMember = placements[0];
+
       const medal: string = getMedalEmoji(placement.placement);
 
       return `${bold("Placement")}: ${medal}${ordinalSuffix(placement.placement)} place`;
@@ -104,6 +105,7 @@ export const TEMPLE_MESSAGES = {
             | ProcessedTempleParticipant
             | TempleNotInSpreadsheetMember): string => {
             const medal: string = getMedalEmoji(placement);
+
             return `${inlineCode(username)} (${medal}${ordinalSuffix(placement)} place)`;
           },
         )
