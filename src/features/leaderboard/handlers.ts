@@ -207,5 +207,5 @@ export async function handleClanPointsLeaderboardInteraction(
     memberPlacementOutsideTop10,
   );
 
-  await sendInteractionContainers(interaction, containers, false);
+  await sendInteractionContainers(interaction, containers, true);
 }
