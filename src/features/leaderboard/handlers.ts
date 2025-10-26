@@ -1,3 +1,4 @@
+import { getGuildConfig } from "config/configUtils.js";
 import {
   getAllTimeClanPointsLeaderboard,
   getPeriodClanPointsLeaderboard,
@@ -5,6 +6,7 @@ import {
 import {
   ChatInputCommandInteraction,
   ContainerBuilder,
+  GuildMember,
   MessageFlags,
 } from "discord.js";
 import { DateTime } from "luxon";
@@ -47,15 +49,6 @@ export async function handleClanPointsLeaderboardInteraction(
     // Get the leaderboard
     leaderboard = await getAllTimeClanPointsLeaderboard(guild);
 
-    // Only keep members who are still in the server
-    leaderboard = leaderboard.filter(
-      (entry: {
-        discordID: null | string;
-        points: null | number;
-      }): "" | boolean | null =>
-        entry.discordID && guild.members.cache.has(entry.discordID),
-    );
-
     // Set the title
     title = LEADERBOARD_MESSAGES.title("");
 
@@ -85,6 +78,25 @@ export async function handleClanPointsLeaderboardInteraction(
     // Set the title
     title = LEADERBOARD_MESSAGES.title(period);
   }
+
+  const memberPermsRoleID: string = getGuildConfig(guild.id).ROLE_IDS
+    .MEMBER_PERMS;
+
+  // Only keep members who are still in the server and have the member perms role
+  leaderboard = leaderboard.filter(
+    (entry: {
+      discordID: null | string;
+      points: null | number;
+    }): boolean | undefined => {
+      if (!entry.discordID) return false;
+
+      const member: GuildMember | undefined = guild.members.cache.get(
+        entry.discordID,
+      );
+
+      return !!member && member.roles.cache.has(memberPermsRoleID);
+    },
+  );
 
   const limit = 10;
 

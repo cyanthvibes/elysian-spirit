@@ -39,7 +39,7 @@ export async function getPeriodClanPointsLeaderboard(
     _sum: { amount: true },
     by: ["targetMemberID"],
     where: {
-      actionType: { in: ["ADD", "DAILY"] },
+      actionType: { in: ["ADD", "DAILY", "TEMPLE"] },
       guildID: guild.id,
       transaction: {
         createdAt: { gte: from, lt: to },
