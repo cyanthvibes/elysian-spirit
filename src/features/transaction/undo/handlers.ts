@@ -1,8 +1,6 @@
 import { undoTransaction } from "database/repositories/clanPoints/transactionRepository.js";
 import { ChatInputCommandInteraction, MessageFlags } from "discord.js";
-import { UNDO_MESSAGES } from "src/features/transaction/undo/messages.js";
-import { ContainerStyle } from "types/container.js";
-import { createSimpleContainers } from "utils/containers/containersBuilder.js";
+import { buildUndoContainers } from "src/features/transaction/undo/messageBuilder.js";
 
 // Function that handles /undo
 export async function handleUndoInteraction(
@@ -24,11 +22,7 @@ export async function handleUndoInteraction(
   );
 
   await interaction.reply({
-    components: createSimpleContainers(
-      ContainerStyle.SUCCESS,
-      UNDO_MESSAGES.undoneLine(result),
-    ),
-
+    components: buildUndoContainers(result),
     flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
   });
 }
