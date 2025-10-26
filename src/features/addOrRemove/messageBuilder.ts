@@ -76,7 +76,7 @@ export function buildAddOrRemoveContainers({
   if (skippedArray.length > 0) {
     blocks.push(
       createContentBlock(
-        skippedArray.map((id: string): string => `${userMention(id)}`),
+        skippedArray.map((id: string): string => `- ${userMention(id)}`),
         ADD_OR_REMOVE_MESSAGES.skipped(skippedArray, guildID),
       ),
     );
