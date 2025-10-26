@@ -20,6 +20,8 @@ export async function handleClanPointsLeaderboardInteraction(
 ): Promise<void> {
   if (!interaction.guild) return;
 
+  const guild = interaction.guild;
+
   await interaction.reply({
     components: createSimpleContainers(
       ContainerStyle.INFO,
@@ -43,7 +45,16 @@ export async function handleClanPointsLeaderboardInteraction(
   // If the period is "all-time", use member balances
   if (period === "all-time") {
     // Get the leaderboard
-    leaderboard = await getAllTimeClanPointsLeaderboard(interaction.guild);
+    leaderboard = await getAllTimeClanPointsLeaderboard(guild);
+
+    // Only keep members who are still in the server
+    leaderboard = leaderboard.filter(
+      (entry: {
+        discordID: null | string;
+        points: null | number;
+      }): "" | boolean | null =>
+        entry.discordID && guild.members.cache.has(entry.discordID),
+    );
 
     // Set the title
     title = LEADERBOARD_MESSAGES.title("");
@@ -66,7 +77,7 @@ export async function handleClanPointsLeaderboardInteraction(
         : now.endOf("month").plus({ days: 1 });
 
     leaderboard = await getPeriodClanPointsLeaderboard(
-      interaction.guild,
+      guild,
       from.toJSDate(),
       to.toJSDate(),
     );
