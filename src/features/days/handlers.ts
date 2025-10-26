@@ -11,6 +11,7 @@ import { readSpreadsheetData } from "src/features/spreadsheet/utils.js";
 import { ContainerStyle } from "types/container.js";
 import { createSimpleContainers } from "utils/containers/containersBuilder.js";
 
+// Function that handles /days
 export async function handleDaysInteraction(
   interaction: ChatInputCommandInteraction | UserContextMenuCommandInteraction,
   targetMember: User,
